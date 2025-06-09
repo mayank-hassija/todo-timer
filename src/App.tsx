@@ -15,26 +15,6 @@ function formatTime(seconds: number): string {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
-const useWindowSize = () => {
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
-};
-
 function App() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [newTaskName, setNewTaskName] = useState('')
@@ -54,9 +34,6 @@ function App() {
   const taskNameInputRef = useRef<HTMLInputElement>(null)
   const durationInputRef = useRef<HTMLInputElement>(null)
   const editInputRef = useRef<HTMLInputElement>(null)
-
-  const windowSize = useWindowSize();
-  const isSmallScreen = windowSize.width < 600;
 
   useEffect(() => {
     const savedTasks = localStorage.getItem('tasks')
