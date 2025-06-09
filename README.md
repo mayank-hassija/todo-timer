@@ -26,7 +26,7 @@ A cross-platform desktop application built with Tauri that functions as a person
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/todo-timer.git
+git clone https://github.com/mayank-hassija/todo-timer.git
 cd todo-timer
 ```
 
