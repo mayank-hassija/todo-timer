@@ -4,7 +4,7 @@
 
 A cross-platform desktop application built with Tauri that functions as a personal to-do list timer.
 
-**Download the latest release:** [here](https://github.com/mayank-hassija/todo-timer/releases)
+Download the latest release [here](https://github.com/mayank-hassija/todo-timer/releases)
 
 ---
 
