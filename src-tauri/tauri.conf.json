@@ -1,0 +1,66 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "Todo Timer",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "Todo Timer",
+        "width": 800,
+        "height": 600,
+        "label": "main",
+        "alwaysOnTop": true
+      },
+      {
+        "fullscreen": false,
+        "resizable": false,
+        "title": "Timer Widget",
+        "width": 300,
+        "height": 150,
+        "label": "timer_widget",
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visible": false
+      }
+    ],
+    "systemTray": {
+      "iconPath": "../public/icon.ico",
+      "iconAsTemplate": false
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.todo-timer.dev",
+      "icon": [
+        "../public/icon.ico"
+      ]
+    },
+    "security": {
+      "csp": null
+    },
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "window": {
+        "all": true
+      },
+      "notification": {
+        "all": true
+      }
+    }
+  }
+}
