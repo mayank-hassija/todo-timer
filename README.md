@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/dfdbba01-c686-4439-b382-fb95507f5e61)
+
 # Todo Timer
 
 A cross-platform desktop application built with Tauri that functions as a personal to-do list timer. The app features a main window for task management and a separate, customizable floating timer widget that remains always on top of other applications.
