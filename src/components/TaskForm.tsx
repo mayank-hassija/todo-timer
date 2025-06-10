@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface TaskFormProps {
   taskNameInputRef: React.RefObject<HTMLInputElement>;
@@ -26,6 +26,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   cancelEdit,
 }) => {
   const [durationError, setDurationError] = useState('');
+  const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -36,6 +37,24 @@ export const TaskForm: React.FC<TaskFormProps> = ({
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => {
       window.removeEventListener('keydown', handleGlobalKeyDown);
+    };
+  }, [editingTaskId, cancelEdit]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        if (editingTaskId) {
+          cancelEdit();
+        }
+      }
+    };
+
+    if (editingTaskId) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [editingTaskId, cancelEdit]);
 
@@ -57,7 +76,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   };
 
   return (
-    <div className="flex gap-2 items-start">
+    <div ref={formRef} className="flex gap-2 items-start relative">
       <input
         ref={taskNameInputRef}
         type="text"
@@ -80,6 +99,12 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         />
         {durationError && <p className="text-red-500 text-xs mt-1">{durationError}</p>}
       </div>
+
+      {editingTaskId && (
+        <div className="absolute -bottom-6 right-0 text-xs text-gray-400">
+          Press <kbd className="px-1.5 py-0.5 bg-gray-600 rounded">Enter</kbd> to save, <kbd className="px-1.5 py-0.5 bg-gray-600 rounded">Esc</kbd> to cancel.
+        </div>
+      )}
     </div>
   );
 }; 

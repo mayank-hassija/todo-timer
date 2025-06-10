@@ -30,7 +30,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-between h-full p-6 bg-gray-900 text-white">
-      <h2 className="text-xl font-semibold truncate w-full text-center" title={taskName}>
+      <h2 className="text-2xl font-semibold truncate w-full text-center" title={taskName}>
         {taskName}
       </h2>
 
@@ -53,23 +53,23 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
                 }`}
                 title={repeatLoop ? "Disable Repeat" : "Enable Repeat"}
             >
-                <Repeat size={22} />
+                <Repeat size={20} />
             </button>
 
             <div className="flex items-center gap-x-4">
                 <button
                     onClick={() => setIsPaused(prev => !prev)}
-                    className="p-4 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all transform hover:scale-105"
+                    className="p-3 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all transform hover:scale-105"
                     title={isPaused ? "Play" : "Pause"}
                 >
-                    {isPaused ? <Play size={30} className="ml-1" /> : <Pause size={30} />}
+                    {isPaused ? <Play size={28} className="ml-1" /> : <Pause size={28} />}
                 </button>
                 <button
                     onClick={handleSkipTask}
                     className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
                     title="Skip Task"
                 >
-                    <SkipForward size={22} />
+                    <SkipForward size={20} />
                 </button>
             </div>
 
@@ -78,7 +78,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
                 className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
                 title="Stop Timer"
             >
-                <Square size={22} />
+                <Square size={20} />
             </button>
         </div>
       </div>

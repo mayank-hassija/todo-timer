@@ -98,27 +98,22 @@ export const TaskList: React.FC<TaskListProps> = ({
                                   e.stopPropagation();
                                   handleEditTask(task);
                                 }}
-                                className="p-2 text-blue-400 hover:text-blue-300 opacity-0 group-hover:opacity-100"
+                                className="p-1 text-blue-400 hover:text-blue-300 opacity-0 group-hover:opacity-100 transition-opacity"
                                 title="Edit Task"
                                 aria-label="Edit Task"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                  <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                  <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
-                                </svg>
+                                <Edit size={20} />
                               </button>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   removeTask(task.id);
                                 }}
-                                className="p-2 text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100"
+                                className="p-1 text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100 transition-opacity"
                                 title="Delete Task"
                                 aria-label="Delete Task"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                                </svg>
+                                <Trash2 size={20} />
                               </button>
                             </div>
                           )}
