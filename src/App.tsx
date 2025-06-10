@@ -90,7 +90,7 @@ function App() {
 
   const setView = async (compact: boolean) => {
     if (compact) {
-      await appWindow.setSize(new LogicalSize(360, 140));
+      await appWindow.setSize(new LogicalSize(360, 200));
     } else {
       const monitor = await currentMonitor();
       if (monitor) {
@@ -241,7 +241,7 @@ function App() {
   if (isTimerRunning && tasks.length > 0) {
     const currentTask = tasks[currentTaskIndex];
     return (
-      <div className="flex flex-col h-screen bg-gray-900 text-white p-4 overflow-y-hidden">
+      <div className="flex flex-col h-screen bg-gray-900 text-white overflow-y-hidden">
         <TimerControls
           isPaused={isPaused}
           setIsPaused={setIsPaused}
