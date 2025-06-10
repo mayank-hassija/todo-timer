@@ -90,7 +90,7 @@ function App() {
 
   const setView = async (compact: boolean) => {
     if (compact) {
-      await appWindow.setSize(new LogicalSize(360, 200));
+      await appWindow.setSize(new LogicalSize(360, 120));
     } else {
       const monitor = await currentMonitor();
       if (monitor) {
