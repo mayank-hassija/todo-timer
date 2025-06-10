@@ -90,4 +90,14 @@ body {
 *:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.no-arrows::-webkit-inner-spin-button,
+.no-arrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-arrows {
+  -moz-appearance: textfield;
 } 

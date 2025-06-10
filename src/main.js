@@ -1,3 +1,7 @@
+/*
+// Legacy code from the plain JavaScript version of the application.
+// This is no longer in use, as the application has been migrated to React (see main.tsx).
+// The contents are commented out to prevent accidental use and to mark it for future deletion.
 import { Store } from 'tauri-plugin-store-api';
 import { invoke } from '@tauri-apps/api/tauri';
 import { appWindow } from '@tauri-apps/api/window';
@@ -223,3 +227,4 @@ newTaskInput.addEventListener('keydown', function(e) {
 taskDurationInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') addTaskBtn.click();
 });
+*/
