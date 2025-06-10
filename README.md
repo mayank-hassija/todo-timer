@@ -1,13 +1,1 @@
-![image](https://github.com/user-attachments/assets/dfdbba01-c686-4439-b382-fb95507f5e61)
-
-# Todo Timer
-
-A cross-platform desktop application built with Tauri that functions as a personal to-do list timer.
-
-**Download the latest release here:** [Todo Timer v1.0.0](https://github.com/mayank-hassija/todo-timer/releases)
-
----
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+![image](https://github.com/user-attachments/assets/a8a44bf8-b94a-4f8f-8949-6ecb66af5d99)
