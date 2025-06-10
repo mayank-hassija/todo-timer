@@ -34,7 +34,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
         {taskName}
       </h2>
 
-      <div className="text-6xl font-mono text-gray-100 -mt-4">
+      <div className="text-6xl font-mono text-gray-100">
         {formatTime(remainingTime)}
       </div>
 

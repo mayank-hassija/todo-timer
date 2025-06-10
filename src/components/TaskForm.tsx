@@ -99,12 +99,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         />
         {durationError && <p className="text-red-500 text-xs mt-1">{durationError}</p>}
       </div>
-
-      {editingTaskId && (
-        <div className="absolute -bottom-6 right-0 text-xs text-gray-400">
-          Press <kbd className="px-1.5 py-0.5 bg-gray-600 rounded">Enter</kbd> to save, <kbd className="px-1.5 py-0.5 bg-gray-600 rounded">Esc</kbd> to cancel.
-        </div>
-      )}
     </div>
   );
 }; 
