@@ -33,7 +33,8 @@
       "targets": "all",
       "identifier": "com.todo-timer.dev",
       "icon": [
-        "icons/icon.png"
+        "icons/icon.png",
+        "icons/icon.ico"
       ]
     },
     "security": {
