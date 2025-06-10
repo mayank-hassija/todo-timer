@@ -31,11 +31,11 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <h2 className="text-xl font-bold mb-2 truncate w-full text-center">{taskName}</h2>
-      <div className="text-5xl font-mono mb-2">
+      <h2 className="text-lg font-bold mb-1 truncate w-full text-center">{taskName}</h2>
+      <div className="text-4xl font-mono mb-1">
         {formatTime(remainingTime)}
       </div>
-      <div className="w-full bg-gray-600 rounded-full h-1.5 mb-3">
+      <div className="w-full bg-gray-600 rounded-full h-1.5 mb-2">
         <div
           className="bg-green-500 h-1.5 rounded-full"
           style={{ width: `${progressPercentage}%` }}

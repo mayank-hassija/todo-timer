@@ -9,7 +9,6 @@ interface TaskFormProps {
   setTaskDuration: (duration: number | '') => void;
   handleTaskNameKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   handleDurationKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  addTask: () => void;
   editingTaskId: string | null;
   cancelEdit: () => void;
 }
@@ -23,7 +22,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   setTaskDuration,
   handleTaskNameKeyDown,
   handleDurationKeyDown,
-  addTask,
   editingTaskId,
   cancelEdit,
 }) => {

@@ -7,7 +7,6 @@ interface TaskListProps {
   tasks: Task[];
   isTimerRunning: boolean;
   currentTaskIndex: number;
-  editingTaskId: string | null;
   handleDragEnd: (result: DropResult) => void;
   handleTaskClick: (taskId: string) => void;
   handleEditTask: (task: Task) => void;
@@ -24,7 +23,6 @@ export const TaskList: React.FC<TaskListProps> = ({
   tasks,
   isTimerRunning,
   currentTaskIndex,
-  editingTaskId,
   handleDragEnd,
   handleTaskClick,
   handleEditTask,
@@ -55,7 +53,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className={`flex items-center justify-between bg-gray-700 p-3 rounded transition-all group cursor-grab active:cursor-grabbing ${
+                          className={`flex items-center justify-between bg-gray-700 p-3 rounded transition-all group cursor-grab active:cursor-grabbing text-sm ${
                             isRunning ? 'ring-2 ring-green-500' : ''
                           } ${snapshot.isDragging ? 'shadow-lg scale-105' : ''}`}
                         >

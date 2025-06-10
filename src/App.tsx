@@ -261,7 +261,6 @@ function App() {
   return (
     <div className={`flex flex-col h-screen bg-gray-900 text-white p-4 ${isScrollable ? 'overflow-y-auto' : 'overflow-y-hidden'}`}>
       <TaskForm
-        addTask={addOrUpdateTask}
         newTaskName={newTaskName}
         setNewTaskName={setNewTaskName}
         taskDuration={taskDuration}
@@ -274,22 +273,23 @@ function App() {
         cancelEdit={cancelEdit}
       />
       
-      <TaskList
-        tasks={tasks}
-        editingTaskId={editingTaskId}
-        handleEditTask={handleEditTask}
-        removeTask={removeTask}
-        handleTaskClick={handleTaskClick}
-        handleDragEnd={handleDragEnd}
-        isTimerRunning={isTimerRunning}
-        currentTaskIndex={currentTaskIndex}
-        repeatLoop={repeatLoop}
-        setRepeatLoop={setRepeatLoop}
-        remainingTime={remainingTime}
-        isPaused={isPaused}
-        setIsPaused={setIsPaused}
-        handleSkipTask={handleSkipTask}
-      />
+      <div className="mt-4">
+        <TaskList
+          tasks={tasks}
+          handleEditTask={handleEditTask}
+          removeTask={removeTask}
+          handleTaskClick={handleTaskClick}
+          handleDragEnd={handleDragEnd}
+          isTimerRunning={isTimerRunning}
+          currentTaskIndex={currentTaskIndex}
+          repeatLoop={repeatLoop}
+          setRepeatLoop={setRepeatLoop}
+          remainingTime={remainingTime}
+          isPaused={isPaused}
+          setIsPaused={setIsPaused}
+          handleSkipTask={handleSkipTask}
+        />
+      </div>
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
