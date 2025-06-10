@@ -16,9 +16,9 @@
         "fullscreen": false,
         "resizable": false,
         "title": "Todo Timer",
-        "width": 384,
+        "width": 360,
         "height": 100,
-        "minWidth": 384,
+        "minWidth": 360,
         "minHeight": 100,
         "label": "main",
         "alwaysOnTop": true

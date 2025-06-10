@@ -47,7 +47,6 @@ export const TaskList: React.FC<TaskListProps> = ({
               <ul className="space-y-2" {...provided.droppableProps} ref={provided.innerRef}>
                 {tasks.map((task, index) => {
                   const isRunning = isTimerRunning && index === currentTaskIndex;
-                  const isEditing = editingTaskId === task.id;
 
                   return (
                     <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -61,33 +60,18 @@ export const TaskList: React.FC<TaskListProps> = ({
                           } ${snapshot.isDragging ? 'shadow-lg scale-105' : ''}`}
                         >
                           <div className="flex items-center gap-3 flex-1">
-                            {isEditing ? (
-                              <div className="flex-1 cursor-pointer" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
-                                <span className="font-medium block truncate">{task.name}</span>
-                                <span className="text-gray-400 ml-2 whitespace-nowrap">({task.duration} min)</span>
-                                {isRunning && (
-                                  <div className="w-full bg-gray-600 rounded-full h-1.5 mt-1.5">
-                                    <div 
-                                      className="bg-green-500 h-1.5 rounded-full" 
-                                      style={{ width: `${(remainingTime / (task.duration * 60)) * 100}%` }}
-                                    ></div>
-                                  </div>
-                                )}
-                              </div>
-                            ) : (
-                              <div className="flex-1 cursor-pointer" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
-                                <span className="font-medium block truncate">{task.name}</span>
-                                <span className="text-gray-400 ml-2 whitespace-nowrap">({task.duration} min)</span>
-                                {isRunning && (
-                                  <div className="w-full bg-gray-600 rounded-full h-1.5 mt-1.5">
-                                    <div 
-                                      className="bg-green-500 h-1.5 rounded-full" 
-                                      style={{ width: `${(remainingTime / (task.duration * 60)) * 100}%` }}
-                                    ></div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
+                            <div className="flex-1 cursor-pointer" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
+                              <span className="font-medium block truncate">{task.name}</span>
+                              <span className="text-gray-400 ml-2 whitespace-nowrap">({task.duration} min)</span>
+                              {isRunning && (
+                                <div className="w-full bg-gray-600 rounded-full h-1.5 mt-1.5">
+                                  <div 
+                                    className="bg-green-500 h-1.5 rounded-full" 
+                                    style={{ width: `${(remainingTime / (task.duration * 60)) * 100}%` }}
+                                  ></div>
+                                </div>
+                              )}
+                            </div>
                           </div>
 
                           {isRunning ? (

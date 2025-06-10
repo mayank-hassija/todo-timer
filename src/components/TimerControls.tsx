@@ -1,5 +1,4 @@
 import React from 'react';
-import { Task } from '../types';
 import { Play, Pause, SkipForward, Repeat, Square } from 'lucide-react';
 
 interface TimerControlsProps {
@@ -32,7 +31,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <h2 className="text-xl font-bold mb-2 truncate px-4 w-full text-center">{taskName}</h2>
+      <h2 className="text-xl font-bold mb-2 truncate w-full text-center">{taskName}</h2>
       <div className="text-5xl font-mono mb-2">
         {formatTime(remainingTime)}
       </div>

@@ -26,6 +26,7 @@ function App() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
   const [isCompactView, setIsCompactView] = useState(false);
+  const [isScrollable, setIsScrollable] = useState(false)
   
   const taskNameInputRef = useRef<HTMLInputElement>(null)
   const durationInputRef = useRef<HTMLInputElement>(null)
@@ -57,7 +58,7 @@ function App() {
     timerRef.current = setInterval(() => {
       setRemainingTime(prev => {
         if (prev <= 1) {
-          handleTaskCompletion(true)
+          handleTaskCompletion()
           return 0
         }
         return prev - 1
@@ -77,8 +78,10 @@ function App() {
           const maxHeight = monitor.size.height / 2;
           const baseHeight = 110;
           const taskHeight = 60;
-          const newHeight = Math.min(baseHeight + tasks.length * taskHeight, maxHeight);
-          appWindow.setSize(new LogicalSize(384, newHeight));
+          const calculatedHeight = baseHeight + tasks.length * taskHeight
+          const newHeight = Math.min(calculatedHeight, maxHeight);
+          appWindow.setSize(new LogicalSize(360, newHeight));
+          setIsScrollable(calculatedHeight > maxHeight)
         }
       }
     }
@@ -87,7 +90,7 @@ function App() {
 
   const setView = async (compact: boolean) => {
     if (compact) {
-      await appWindow.setSize(new LogicalSize(384, 120));
+      await appWindow.setSize(new LogicalSize(360, 140));
     } else {
       const monitor = await currentMonitor();
       if (monitor) {
@@ -95,13 +98,13 @@ function App() {
         const baseHeight = 110;
         const taskHeight = 60;
         const newHeight = Math.min(baseHeight + tasks.length * taskHeight, maxHeight);
-        await appWindow.setSize(new LogicalSize(384, newHeight));
+        await appWindow.setSize(new LogicalSize(360, newHeight));
       }
     }
     setIsCompactView(compact);
   }
 
-  const handleTaskCompletion = (fromTimer: boolean = false) => {
+  const handleTaskCompletion = () => {
     const nextIndex = currentTaskIndex + 1
     if (nextIndex < tasks.length) {
       setCurrentTaskIndex(nextIndex)
@@ -117,7 +120,7 @@ function App() {
 
   const handleSkipTask = () => {
     if (!isTimerRunning) return;
-    handleTaskCompletion(false);
+    handleTaskCompletion();
   };
   
   const addOrUpdateTask = () => {
@@ -238,7 +241,7 @@ function App() {
   if (isTimerRunning && tasks.length > 0) {
     const currentTask = tasks[currentTaskIndex];
     return (
-      <div className="flex flex-col h-screen bg-gray-900 text-white p-4 overflow-y-auto">
+      <div className="flex flex-col h-screen bg-gray-900 text-white p-4 overflow-y-hidden">
         <TimerControls
           isPaused={isPaused}
           setIsPaused={setIsPaused}
@@ -256,7 +259,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-900 text-white p-4 overflow-y-auto">
+    <div className={`flex flex-col h-screen bg-gray-900 text-white p-4 ${isScrollable ? 'overflow-y-auto' : 'overflow-y-hidden'}`}>
       <TaskForm
         addTask={addOrUpdateTask}
         newTaskName={newTaskName}

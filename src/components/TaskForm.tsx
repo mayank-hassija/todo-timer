@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, X, Check } from 'lucide-react';
 
 interface TaskFormProps {
   taskNameInputRef: React.RefObject<HTMLInputElement>;
@@ -60,7 +59,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   };
 
   return (
-    <div className="flex gap-2 mb-4 items-start">
+    <div className="flex gap-2 items-start">
       <input
         ref={taskNameInputRef}
         type="text"
