@@ -11,18 +11,21 @@ C:\Users\Name\Documents\todo-timer>npm run tauri dev
 > todo-timer@0.1.0 dev
 > vite
 
-   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
-    Building [=======================> ] 402/404: todo-...
-  VITE v4.5.14  ready in 1376 ms
+
+  VITE v4.5.14  ready in 1941 ms
 
   ➜  Local:   http://localhost:1420/
   ➜  Network: use --host to expose
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3m 18s
-     Running `target\debug\todo-timer.exe`
+   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
+error[E0599]: no method named `path` found for struct `tauri_plugin_store::Builder` in the current scope
+  --> src\main.rs:19:18
+   |
+18 | /             Builder::default()
+19 | |                 .path("data/store.bin".into())
+   | |                 -^^^^ method not found in `Builder`
+   | |_________________|
+   |
 
-thread 'main' panicked at src\main.rs:51:10:
-error while running tauri application: PluginInitialization("store", "Error deserializing 'plugins.store' within your Tauri configuration: invalid type: map, expected unit")
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-error: process didn't exit successfully: `target\debug\todo-timer.exe` (exit code: 101)
-
-C:\Users\Name\Documents\todo-timer>
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `todo-timer` (bin "todo-timer") due to 1 previous error
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? y
