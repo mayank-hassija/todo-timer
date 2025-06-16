@@ -1,3 +1,4 @@
+
 C:\Users\Name\Documents\todo-timer>npm run tauri build
 
 > todo-timer@0.1.0 tauri
@@ -8,129 +9,38 @@ C:\Users\Name\Documents\todo-timer>npm run tauri build
 > todo-timer@0.1.0 build
 > tsc && vite build
 
-src/hooks/useWindowResize.ts:3:10 - error TS2724: '"@tauri-apps/api/window"' has no exported member named 'appWindow'. Did you mean 'Window'?
+src/hooks/useWindowResize.ts:3:10 - error TS2305: Module '"@tauri-apps/api/window"' has no exported member 'getCurrent'.
 
-3 import { appWindow } from '@tauri-apps/api/window';
-           ~~~~~~~~~
-
-src/store/useTaskStore.ts:2:19 - error TS2305: Module '"zustand/middleware"' has no exported member 'StateCreator'.
-
-2 import { persist, StateCreator } from 'zustand/middleware';
-                    ~~~~~~~~~~~~
-
-src/store/useTaskStore.ts:14:52 - error TS7006: Parameter 'set' implicitly has an 'any' type.
-
-14 const taskStateCreator: StateCreator<TaskState> = (set) => ({
-                                                      ~~~
-
-src/store/useTaskStore.ts:16:14 - error TS7006: Parameter 'tasks' implicitly has an 'any' type.
-
-16   setTasks: (tasks) => set({ tasks }),
-                ~~~~~
-
-src/store/useTaskStore.ts:17:13 - error TS7006: Parameter 'task' implicitly has an 'any' type.
-
-17   addTask: (task) =>
-               ~~~~
-
-src/store/useTaskStore.ts:18:10 - error TS7006: Parameter 'state' implicitly has an 'any' type.
-
-18     set((state) => ({
-            ~~~~~
-
-src/store/useTaskStore.ts:21:16 - error TS7006: Parameter 'taskId' implicitly has an 'any' type.
-
-21   updateTask: (taskId, updates) =>
-                  ~~~~~~
-
-src/store/useTaskStore.ts:21:24 - error TS7006: Parameter 'updates' implicitly has an 'any' type.
-
-21   updateTask: (taskId, updates) =>
-                          ~~~~~~~
-
-src/store/useTaskStore.ts:22:10 - error TS7006: Parameter 'state' implicitly has an 'any' type.
-
-22     set((state) => ({
-            ~~~~~
-
-src/store/useTaskStore.ts:23:31 - error TS7006: Parameter 't' implicitly has an 'any' type.
-
-23       tasks: state.tasks.map((t) =>
-                                 ~
-
-src/store/useTaskStore.ts:27:16 - error TS7006: Parameter 'taskId' implicitly has an 'any' type.
-
-27   removeTask: (taskId) =>
-                  ~~~~~~
-
-src/store/useTaskStore.ts:28:10 - error TS7006: Parameter 'state' implicitly has an 'any' type.
-
-28     set((state) => ({
-            ~~~~~
-
-src/store/useTaskStore.ts:29:34 - error TS7006: Parameter 't' implicitly has an 'any' type.
-
-29       tasks: state.tasks.filter((t) => t.id !== taskId),
-                                    ~
-
-src/store/useTaskStore.ts:31:18 - error TS7006: Parameter 'startIndex' implicitly has an 'any' type.
-
-31   reorderTasks: (startIndex, endIndex) =>
-                    ~~~~~~~~~~
-
-src/store/useTaskStore.ts:31:30 - error TS7006: Parameter 'endIndex' implicitly has an 'any' type.
-
-31   reorderTasks: (startIndex, endIndex) =>
-                                ~~~~~~~~
-
-src/store/useTaskStore.ts:32:10 - error TS7006: Parameter 'state' implicitly has an 'any' type.
-
-32     set((state) => {
-            ~~~~~
-
-src/store/useTimerStore.ts:2:19 - error TS2305: Module '"zustand/middleware"' has no exported member 'StateCreator'.
-
-2 import { persist, StateCreator } from 'zustand/middleware';
-                    ~~~~~~~~~~~~
-
-src/store/useTimerStore.ts:22:54 - error TS7006: Parameter 'set' implicitly has an 'any' type.
-
-22 const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
-                                                        ~~~
-
-src/store/useTimerStore.ts:22:59 - error TS7006: Parameter 'get' implicitly has an 'any' type.
-
-22 const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
-                                                             ~~~
-
-src/store/useTimerStore.ts:28:16 - error TS7006: Parameter 'taskIndex' implicitly has an 'any' type.
-
-28   startTimer: (taskIndex) => {
-                  ~~~~~~~~~
-
-src/store/useTimerStore.ts:73:12 - error TS7006: Parameter 'state' implicitly has an 'any' type.
-
-73       set((state) => ({ remainingTime: state.remainingTime - 1 }));
-              ~~~~~
-
-src/store/useTimerStore.ts:78:32 - error TS7006: Parameter 'state' implicitly has an 'any' type.
-
-78   toggleRepeatMode: () => set((state) => {
-                                  ~~~~~
-
-src/store/useTimerStore.ts:82:22 - error TS7006: Parameter 'time' implicitly has an 'any' type.
-
-82   setRemainingTime: (time) => set({ remainingTime: time }),
-                        ~~~~
+3 import { getCurrent } from '@tauri-apps/api/window';
+           ~~~~~~~~~~
 
 
-Found 23 errors in 3 files.
+Found 1 error in src/hooks/useWindowResize.ts:3
 
-Errors  Files
-     1  src/hooks/useWindowResize.ts:3
-    15  src/store/useTaskStore.ts:2
-     7  src/store/useTimerStore.ts:2
 beforeBuildCommand `npm run build` failed with exit code 2
        Error beforeBuildCommand `npm run build` failed with exit code 2
 
-C:\Users\Name\Documents\todo-timer>
+C:\Users\Name\Documents\todo-timer>npm run tauri dev
+
+> todo-timer@0.1.0 tauri
+> tauri dev
+
+     Running BeforeDevCommand (`npm run dev`)
+     Running DevCommand (`cargo  run --no-default-features --color always --`)
+        Info Watching C:\Users\Name\Documents\todo-timer\src-tauri for changes...
+
+> todo-timer@0.1.0 dev
+> vite
+
+
+  VITE v4.5.14  ready in 27321 ms
+
+  ➜  Local:   http://localhost:1420/
+  ➜  Network: use --host to expose
+   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 49s
+     Running `target\debug\todo-timer.exe`
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? [0617/022228.407:ERROR:ui\gfx\win\window_impl.cc:124] Failed to unregister class Chrome_WidgetWin_0. Error = 1411
+error: process didn't exit successfully: `target\debug\todo-timer.exe` (exit code: 0xc000013a, STATUS_CONTROL_C_EXIT)
+
+Terminate batch job (Y/N)? y
