@@ -13,39 +13,34 @@ export const TaskForm: React.FC = () => {
     durationInputRef,
     addOrUpdateTask,
     cancelEdit,
-    handleTaskNameKeyDown,
-    handleDurationKeyDown,
+    handleKeyDown,
   } = useTaskManager();
 
   const [durationError, setDurationError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
+    if (!editingTaskId) {
+      return;
+    }
+
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && editingTaskId) {
+      if (e.key === 'Escape') {
         cancelEdit();
       }
     };
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleGlobalKeyDown);
-    };
-  }, [editingTaskId, cancelEdit]);
 
-  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        if (editingTaskId) {
-          cancelEdit();
-        }
+        cancelEdit();
       }
     };
 
-    if (editingTaskId) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
+      window.removeEventListener('keydown', handleGlobalKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [editingTaskId, cancelEdit]);
@@ -70,9 +65,16 @@ export const TaskForm: React.FC = () => {
     addOrUpdateTask();
   };
 
+  const formBorderClasses = editingTaskId ? 'p-4 border border-indigo-500 rounded-lg' : '';
+  const submitButtonClasses = `px-4 py-2 rounded-md transition-all duration-200 ease-in-out flex items-center gap-2 font-semibold ${
+    editingTaskId
+      ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
+      : 'bg-rose-500 hover:bg-rose-600 text-white'
+  }`;
+
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="relative">
-      <div className={`flex gap-3 transition-all duration-300 ${editingTaskId ? 'p-4 border border-indigo-500 rounded-lg' : ''}`}>
+      <div className={`flex gap-3 transition-all duration-300 ${formBorderClasses}`}>
         <div className="flex-grow">
           <label htmlFor="taskName" className="sr-only">Task Name</label>
           <input
@@ -81,7 +83,7 @@ export const TaskForm: React.FC = () => {
             type="text"
             value={newTaskName}
             onChange={(e) => setNewTaskName(e.target.value)}
-            onKeyDown={handleTaskNameKeyDown}
+            onKeyDown={(e) => handleKeyDown(e, durationInputRef.current)}
             placeholder="What needs to be done?"
             className="w-full p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-100 placeholder-slate-400 text-base"
           />
@@ -95,7 +97,7 @@ export const TaskForm: React.FC = () => {
               type="number"
               value={taskDuration}
               onChange={handleDurationChange}
-              onKeyDown={handleDurationKeyDown}
+              onKeyDown={(e) => handleKeyDown(e)}
               placeholder="Mins"
               className={`w-28 p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:outline-none text-slate-100 placeholder-slate-400 no-arrows text-base ${durationError ? 'ring-2 ring-red-500' : 'focus:ring-indigo-500'}`}
               min="1"
@@ -105,11 +107,7 @@ export const TaskForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className={`px-4 py-2 rounded-md transition-all duration-200 ease-in-out flex items-center gap-2 font-semibold ${
-            editingTaskId
-              ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
-              : 'bg-rose-500 hover:bg-rose-600 text-white'
-          }`}
+          className={submitButtonClasses}
           aria-label={editingTaskId ? 'Update Task' : 'Add Task'}
         >
           {editingTaskId ? 'Update' : 'Add'}

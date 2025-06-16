@@ -2,6 +2,7 @@ import React from 'react';
 import { Play, Pause, SkipForward, Repeat, Square, Repeat1 } from 'lucide-react';
 import { useTimerStore } from '../store/useTimerStore';
 import { formatTime, calculateNewTime } from '../utils';
+import { CircularProgressBar } from './CircularProgressBar';
 
 interface TimerControlsProps {
   taskName: string;
@@ -31,30 +32,25 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
     }
   };
 
-  const getRepeatProps = () => {
-    switch (repeatMode) {
-      case 'current':
-        return {
-          Icon: Repeat1,
-          title: 'Repeat Current Task',
-          className: 'text-green-400 bg-green-400/10'
-        };
-      case 'all':
-        return {
-          Icon: Repeat,
-          title: 'Repeat All Tasks',
-          className: 'text-green-400 bg-green-400/10'
-        };
-      default:
-        return {
-          Icon: Repeat,
-          title: 'Enable Repeat',
-          className: 'text-slate-400 hover:text-white hover:bg-slate-700'
-        };
+  const repeatModes = {
+    off: {
+      Icon: Repeat,
+      title: 'Enable Repeat',
+      className: 'text-slate-400 hover:text-white hover:bg-slate-700'
+    },
+    current: {
+      Icon: Repeat1,
+      title: 'Repeat Current Task',
+      className: 'text-green-400 bg-green-400/10'
+    },
+    all: {
+      Icon: Repeat,
+      title: 'Repeat All Tasks',
+      className: 'text-green-400 bg-green-400/10'
     }
   };
 
-  const { Icon: RepeatIcon, title: repeatTitle, className: repeatClassName } = getRepeatProps();
+  const { Icon: RepeatIcon, title: repeatTitle, className: repeatClassName } = repeatModes[repeatMode];
 
   return (
     <div className="flex flex-col items-center justify-around h-full p-6 bg-slate-900 text-white select-none">
@@ -65,32 +61,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
       </div>
 
       <div className="relative w-72 h-72 flex items-center justify-center">
-        <svg className="absolute w-full h-full transform -rotate-90">
-          <circle
-            className="text-slate-700/50"
-            stroke="currentColor"
-            strokeWidth="12"
-            fill="transparent"
-            r="134"
-            cx="144"
-            cy="144"
-          />
-          <circle
-            className="text-green-500"
-            stroke="currentColor"
-            strokeWidth="12"
-            strokeLinecap="round"
-            fill="transparent"
-            r="134"
-            cx="144"
-            cy="144"
-            style={{
-              strokeDasharray: `${2 * Math.PI * 134}`,
-              strokeDashoffset: `${2 * Math.PI * 134 * (1 - progressPercentage / 100)}`,
-              transition: 'stroke-dashoffset 0.5s linear'
-            }}
-          />
-        </svg>
+        <CircularProgressBar progress={progressPercentage} />
         <div className="absolute flex flex-col items-center">
           <span className="text-6xl font-bold font-mono tracking-tighter">
             {formatTime(remainingTime)}

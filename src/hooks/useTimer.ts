@@ -1,25 +1,28 @@
 import { useEffect, useRef } from 'react'
 import { useTimerStore } from '../store/useTimerStore'
+import shallow from 'zustand/shallow'
 
 export function useTimer() {
-  const isTimerRunning = useTimerStore((state) => state.isTimerRunning)
-  const isPaused = useTimerStore((state) => state.isPaused)
-  const tick = useTimerStore((state) => state.tick)
+  const { isTimerRunning, isPaused, tick } = useTimerStore(
+    (state) => ({
+      isTimerRunning: state.isTimerRunning,
+      isPaused: state.isPaused,
+      tick: state.tick,
+    }),
+    shallow
+  )
+
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    if (timerRef.current) clearInterval(timerRef.current)
-
-    if (!isTimerRunning || isPaused) {
-      return
+    if (isTimerRunning && !isPaused) {
+      timerRef.current = setInterval(tick, 1000)
     }
 
-    timerRef.current = setInterval(() => {
-      tick()
-    }, 1000)
-
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
     }
   }, [isTimerRunning, isPaused, tick])
 } 

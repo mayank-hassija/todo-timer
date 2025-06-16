@@ -2,24 +2,25 @@ import { useEffect } from 'react';
 import { useTaskStore, type TaskState } from '../store/useTaskStore';
 import { getCurrentWindow, LogicalSize } from '@tauri-apps/api/window';
 
-const BASE_HEIGHT = 160; // Base height for the window (padding, form)
-const TASK_HEIGHT = 56; // h-14 -> 3.5rem -> 56px
-const MAX_VISIBLE_TASKS = 5;
-const EMPTY_LIST_HEIGHT = 80;
+const WINDOW_SIZES = {
+  BASE_HEIGHT: 160,
+  TASK_HEIGHT: 56,
+  MAX_VISIBLE_TASKS: 5,
+  EMPTY_LIST_HEIGHT: 80,
+};
 
 export const useWindowResize = () => {
   const tasks = useTaskStore((state: TaskState) => state.tasks);
 
   useEffect(() => {
     const resizeWindow = async () => {
-      let newHeight;
+      const { BASE_HEIGHT, EMPTY_LIST_HEIGHT, MAX_VISIBLE_TASKS, TASK_HEIGHT } = WINDOW_SIZES;
+      
+      const tasksHeight = tasks.length > 0 
+        ? Math.min(tasks.length, MAX_VISIBLE_TASKS) * TASK_HEIGHT
+        : EMPTY_LIST_HEIGHT;
 
-      if (tasks.length === 0) {
-        newHeight = BASE_HEIGHT + EMPTY_LIST_HEIGHT;
-      } else {
-        const visibleTasks = Math.min(tasks.length, MAX_VISIBLE_TASKS);
-        newHeight = BASE_HEIGHT + (visibleTasks * TASK_HEIGHT);
-      }
+      const newHeight = BASE_HEIGHT + tasksHeight;
       
       const appWindow = getCurrentWindow();
       const currentSize = await appWindow.innerSize();

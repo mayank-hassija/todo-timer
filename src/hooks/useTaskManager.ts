@@ -55,19 +55,14 @@ export function useTaskManager() {
     setTaskDuration('');
   };
 
-  const handleTaskNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, nextElement?: HTMLInputElement | null) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (newTaskName.trim()) {
-        durationInputRef.current?.focus();
-      }
-    }
-  };
-
-  const handleDurationKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (newTaskName.trim() && taskDuration) {
+      if (nextElement) {
+        if (e.currentTarget.id === 'taskName' && !newTaskName.trim()) return;
+        nextElement.focus();
+      } else {
+        if (!newTaskName.trim() || !taskDuration) return;
         addOrUpdateTask();
       }
     }
@@ -86,8 +81,7 @@ export function useTaskManager() {
     handleTaskClick,
     handleEditTask,
     cancelEdit,
-    handleTaskNameKeyDown,
-    handleDurationKeyDown,
+    handleKeyDown,
     stopTimer: stopTimerAction,
     reorderTasks,
     removeTask,

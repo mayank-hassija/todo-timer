@@ -1,7 +1,9 @@
 import { create, StateCreator } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
 import { RepeatMode, Task } from '../types';
 import { useTaskStore } from './useTaskStore';
+import { playSound } from '../utils';
 
 export interface TimerState {
   currentTaskIndex: number | null;
@@ -19,39 +21,45 @@ export interface TimerState {
   setRemainingTime: (time: number) => void;
 }
 
-const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
+const repeatModeCycle: Record<RepeatMode, RepeatMode> = {
+  off: 'current',
+  current: 'all',
+  all: 'off',
+};
+
+const timerStateCreator: StateCreator<TimerState, [['zustand/immer', never]]> = (set, get) => ({
   currentTaskIndex: null,
   isTimerRunning: false,
   isPaused: false,
   remainingTime: 0,
   repeatMode: 'off',
-  startTimer: (taskIndex: number) => {
+  startTimer: (taskIndex) => {
     const tasks = useTaskStore.getState().tasks;
     if (taskIndex < tasks.length) {
-      set({
-        isTimerRunning: true,
-        isPaused: false,
-        currentTaskIndex: taskIndex,
-        remainingTime: tasks[taskIndex].duration * 60,
+      set((state) => {
+        state.isTimerRunning = true;
+        state.isPaused = false;
+        state.currentTaskIndex = taskIndex;
+        state.remainingTime = tasks[taskIndex].duration * 60;
       });
     }
   },
   pauseTimer: () => set({ isPaused: true }),
   resumeTimer: () => set({ isPaused: false }),
-  stopTimer: () =>
-    set({
-      isTimerRunning: false,
-      isPaused: false,
-      currentTaskIndex: null,
-      remainingTime: 0,
-    }),
+  stopTimer: () => {
+    set((state) => {
+      state.isTimerRunning = false;
+      state.isPaused = false;
+      state.currentTaskIndex = null;
+      state.remainingTime = 0;
+    });
+  },
   skipTask: () => {
     const { currentTaskIndex, repeatMode, startTimer, stopTimer } = get();
     if (currentTaskIndex === null) return;
     const tasks = useTaskStore.getState().tasks;
 
-    const audio = new Audio('/sound.mp3');
-    audio.play().catch(e => console.error("Error playing sound:", e));
+    playSound('/sound.mp3');
 
     if (repeatMode === 'current') {
       startTimer(currentTaskIndex);
@@ -69,22 +77,29 @@ const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
     }
   },
   tick: () => {
-    if (get().remainingTime > 1) {
-      set((state: TimerState) => ({ remainingTime: state.remainingTime - 1 }));
-    } else {
-      get().skipTask();
-    }
+    set((state) => {
+      if (state.remainingTime > 1) {
+        state.remainingTime -= 1;
+      } else {
+        get().skipTask();
+      }
+    });
   },
-  toggleRepeatMode: () => set((state: TimerState) => {
-    const nextMode: RepeatMode = state.repeatMode === 'off' ? 'current' : state.repeatMode === 'current' ? 'all' : 'off';
-    return { repeatMode: nextMode };
-  }),
-  setRemainingTime: (time: number) => set({ remainingTime: time }),
+  toggleRepeatMode: () => {
+    set((state) => {
+      state.repeatMode = repeatModeCycle[state.repeatMode];
+    });
+  },
+  setRemainingTime: (time) => {
+    set((state) => {
+      state.remainingTime = time;
+    });
+  },
 });
 
 export const useTimerStore = create<TimerState>()(
   persist(
-    timerStateCreator,
+    immer(timerStateCreator),
     {
       name: 'todo-timer-storage',
       partialize: (state) => ({
