@@ -83,12 +83,12 @@ export const TaskForm: React.FC = () => {
             value={newTaskName}
             onChange={(e) => setNewTaskName(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, durationInputRef.current)}
-            placeholder="What needs to be done?"
+            placeholder="Name"
             className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-gray-400 text-base"
           />
         </div>
         <div className="flex-shrink-0">
-          <label htmlFor="taskDuration" className="sr-only">Duration (minutes)</label>
+          <label htmlFor="taskDuration" className="sr-only">Mins</label>
           <input
             id="taskDuration"
             ref={durationInputRef}
