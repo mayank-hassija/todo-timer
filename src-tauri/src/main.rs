@@ -4,7 +4,7 @@
 )]
 
 use tauri::{
-    menu::{Menu, MenuItem},
+    menu::{Menu, MenuItem, PredefinedMenuItem},
     tray::{TrayIconBuilder, TrayIconEvent},
     Manager,
 };
@@ -19,10 +19,12 @@ fn main() {
         .plugin(tauri_plugin_notification::init())
         .setup(|app| {
             app.store("data/store.bin")?;
-            let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let show = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;
+            let hide = MenuItem::with_id(app, "hide", "Hide", true, None::<&str>)?;
+            let separator = PredefinedMenuItem::separator(app)?;
+            let quit = MenuItem::with_id(app, "quit", "Quit", true, Some("cmdorctrl+q"))?;
 
-            let menu = Menu::with_items(app, &[&show, &quit])?;
+            let menu = Menu::with_items(app, &[&show, &hide, &separator, &quit])?;
 
             let _tray = TrayIconBuilder::new()
                 .menu(&menu)
@@ -34,6 +36,11 @@ fn main() {
                         if let Some(window) = app.get_webview_window("main") {
                             window.show().ok();
                             window.set_focus().ok();
+                        }
+                    }
+                    "hide" => {
+                        if let Some(window) = app.get_webview_window("main") {
+                            window.hide().ok();
                         }
                     }
                     _ => {}

@@ -63,9 +63,10 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
             {...provided.draggableProps}
             className={itemClasses}
           >
+            <div className="absolute top-0 left-0 bottom-0 bg-green-500/20 rounded-lg transition-all duration-500 ease-linear" style={{ width: `${progressPercentage}%` }}></div>
             <div
               {...provided.dragHandleProps}
-              className="flex items-center justify-center px-2 text-slate-500 cursor-grab active:cursor-grabbing"
+              className="flex items-center justify-center pl-2 pr-3 text-slate-500 cursor-grab active:cursor-grabbing"
               title="Drag to reorder"
             >
               <GripVertical size={20} />
@@ -78,58 +79,48 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
               </div>
             </div>
 
-            {isCurrent && isTimerRunning ? (
-              <div className="flex items-center gap-2 pr-2">
-                <button onClick={() => isPaused ? resumeTimer() : pauseTimer()} className="p-2 text-yellow-400 hover:text-yellow-300 transition-colors rounded-full hover:bg-yellow-400/10" title={isPaused ? "Resume" : "Pause"}>
-                  {isPaused ? <Play size={20} className="ml-0.5"/> : <Pause size={20} />}
-                </button>
-                <button onClick={skipTask} className="p-2 text-sky-400 hover:text-sky-300 transition-colors rounded-full hover:bg-sky-400/10" title="Skip Task">
-                  <SkipForward size={20} />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditTask(task);
-                  }}
-                  className="p-2 text-slate-400 hover:text-indigo-400 transition-colors rounded-full opacity-0 group-hover:opacity-100"
-                  title="Edit Task"
-                >
-                  <Edit size={18} />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete();
-                  }}
-                  className="p-2 text-slate-400 hover:text-rose-500 transition-colors rounded-full opacity-0 group-hover:opacity-100"
-                  title="Delete Task"
-                >
-                  <Trash2 size={18} />
-                </button>
-                <button
-                  onClick={() => startTimer(index)}
-                  className="px-3 py-1.5 bg-green-600 text-white rounded-full text-xs font-semibold hover:bg-green-500 transition-colors shadow-sm ml-2"
-                  title="Start Timer"
-                >
-                  Start
-                </button>
-              </div>
-            )}
-            
-            {isCurrent && isTimerRunning && (
-                <div
-                className="absolute bottom-0 left-0 right-0 h-1 bg-green-500/30 rounded-b-lg"
-                onClick={(e) => handleProgressBarClick(e, totalDuration)}
-              >
-                <div
-                  className="h-1 bg-green-500 rounded-b-lg transition-all duration-500 ease-linear"
-                  style={{ width: `${progressPercentage}%` }}
-                ></div>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              {isCurrent && isTimerRunning ? (
+                <>
+                  <button onClick={() => isPaused ? resumeTimer() : pauseTimer()} className="p-2 text-yellow-400 hover:text-yellow-300 transition-colors rounded-full hover:bg-yellow-400/10" title={isPaused ? "Resume" : "Pause"}>
+                    {isPaused ? <Play size={20} className="ml-0.5"/> : <Pause size={20} />}
+                  </button>
+                  <button onClick={skipTask} className="p-2 text-sky-400 hover:text-sky-300 transition-colors rounded-full hover:bg-sky-400/10" title="Skip Task">
+                    <SkipForward size={20} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditTask(task);
+                    }}
+                    className="p-2 text-slate-400 hover:text-indigo-400 transition-colors rounded-full hover:bg-indigo-400/10"
+                    title="Edit Task"
+                  >
+                    <Edit size={18} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete();
+                    }}
+                    className="p-2 text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-500/10"
+                    title="Delete Task"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                  <button
+                    onClick={() => startTimer(index)}
+                    className="p-2 text-green-500 hover:text-green-400 transition-colors rounded-full hover:bg-green-500/10"
+                    title="Start Timer"
+                  >
+                    <Play size={20} className="ml-0.5" />
+                  </button>
+                </>
+              )}
+            </div>
           </li>
         );
       }}

@@ -27,10 +27,10 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-slate-900 text-slate-100 container mx-auto px-4">
+    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-slate-100 container mx-auto sm:px-4">
       <Header />
-      <main className="w-full max-w-2xl mx-auto flex-grow flex flex-col pt-2 pb-8">
-        <div className="bg-slate-800/50 p-6 rounded-lg shadow-lg backdrop-blur-sm">
+      <main className="w-full max-w-2xl mx-auto flex-grow flex flex-col pt-2 pb-8 transition-opacity duration-300">
+        <div className="bg-slate-800/50 p-6 rounded-2xl shadow-lg backdrop-blur-sm border border-slate-700/50">
           <TaskForm />
         </div>
         

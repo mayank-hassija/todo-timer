@@ -12,18 +12,21 @@
     "windows": [
       {
         "fullscreen": false,
-        "resizable": false,
+        "resizable": true,
         "title": "Todo Timer",
-        "width": 360,
-        "height": 100,
-        "minWidth": 360,
-        "minHeight": 100,
+        "width": 420,
+        "height": 600,
+        "minWidth": 420,
+        "minHeight": 300,
+        "maxWidth": 600,
+        "maxHeight": 800,
         "label": "main",
-        "alwaysOnTop": true,
-        "minimizable": false,
-        "maximizable": false,
-        "decorations": false,
-        "shadow": true
+        "alwaysOnTop": false,
+        "minimizable": true,
+        "maximizable": true,
+        "decorations": true,
+        "shadow": true,
+        "transparent": false
       }
     ],
     "trayIcon": {

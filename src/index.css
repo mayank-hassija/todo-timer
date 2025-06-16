@@ -14,21 +14,20 @@
   }
 
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: theme('colors.slate.800');
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: theme('colors.slate.600');
-    border-radius: 5px;
-    border: 2px solid theme('colors.slate.800');
+    background: theme('colors.slate.700');
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: theme('colors.slate.500');
+    background: theme('colors.slate.600');
   }
 
   *:focus {
@@ -39,6 +38,11 @@
     outline: 2px solid theme('colors.indigo.500');
     outline-offset: 2px;
     border-radius: 4px;
+    transition: outline-offset 150ms ease-in-out, outline 150ms ease-in-out;
+  }
+
+  * {
+    transition: background-color 150ms ease-in-out, color 150ms ease-in-out, border-color 150ms ease-in-out;
   }
 }
 

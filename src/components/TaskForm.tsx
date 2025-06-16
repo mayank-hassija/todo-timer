@@ -66,7 +66,7 @@ export const TaskForm: React.FC = () => {
   };
 
   const formBorderClasses = editingTaskId ? 'p-4 border border-indigo-500 rounded-lg' : '';
-  const submitButtonClasses = `px-4 py-2 rounded-md transition-all duration-200 ease-in-out flex items-center gap-2 font-semibold ${
+  const submitButtonClasses = `px-4 py-3 rounded-md transition-all duration-200 ease-in-out flex items-center gap-2 font-semibold ${
     editingTaskId
       ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
       : 'bg-rose-500 hover:bg-rose-600 text-white'
@@ -88,7 +88,7 @@ export const TaskForm: React.FC = () => {
             className="w-full p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-100 placeholder-slate-400 text-base"
           />
         </div>
-        <div className="flex flex-col">
+        <div>
           <label htmlFor="taskDuration" className="sr-only">Duration (minutes)</label>
           <div className="relative">
             <input
@@ -99,24 +99,25 @@ export const TaskForm: React.FC = () => {
               onChange={handleDurationChange}
               onKeyDown={(e) => handleKeyDown(e)}
               placeholder="Mins"
-              className={`w-28 p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:outline-none text-slate-100 placeholder-slate-400 no-arrows text-base ${durationError ? 'ring-2 ring-red-500' : 'focus:ring-indigo-500'}`}
+              className={`w-32 p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:outline-none text-slate-100 placeholder-slate-400 no-arrows text-base ${durationError ? 'ring-2 ring-red-500' : 'focus:ring-indigo-500'}`}
               min="1"
             />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">min</span>
           </div>
-          {durationError && <p className="text-red-500 text-xs mt-1.5 absolute -bottom-5 right-0">{durationError}</p>}
+          {durationError && <p className="text-red-500 text-xs mt-1">{durationError}</p>}
         </div>
         <button
           type="submit"
           className={submitButtonClasses}
           aria-label={editingTaskId ? 'Update Task' : 'Add Task'}
         >
-          {editingTaskId ? 'Update' : 'Add'}
+          {editingTaskId ? 'Update' : <><Plus size={18} className="-ml-1" /><span>Add</span></>}
         </button>
         {editingTaskId && (
           <button
             type="button"
             onClick={cancelEdit}
-            className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-full absolute -top-3 -right-3"
+            className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 backdrop-blur-sm rounded-full absolute -top-3 -right-3"
             title="Cancel Edit"
           >
             <X size={20} />

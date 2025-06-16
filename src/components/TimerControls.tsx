@@ -60,48 +60,52 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
         </h2>
       </div>
 
-      <div className="relative w-72 h-72 flex items-center justify-center">
-        <CircularProgressBar progress={progressPercentage} />
+      <div className="relative w-80 h-80 flex items-center justify-center">
+        <div className="absolute inset-0 bg-slate-800/50 rounded-full"></div>
+        <CircularProgressBar progress={progressPercentage} size={320} strokeWidth={14} />
         <div className="absolute flex flex-col items-center">
-          <span className="text-6xl font-bold font-mono tracking-tighter">
+          <span className="text-7xl font-bold font-mono tracking-tighter transition-colors duration-500"
+            style={{ color: isPaused ? '#facc15' : 'white' }}
+          >
             {formatTime(remainingTime)}
           </span>
-          <span className="text-lg text-slate-400 font-mono">
+          <span className="text-xl text-slate-400 font-mono">
             {formatTime(totalDuration)}
           </span>
         </div>
       </div>
 
-      <div className="w-full max-w-md">
-        <div className="flex justify-center items-center gap-x-4">
+      <div className="w-full max-w-lg">
+        <div className="grid grid-cols-5 gap-x-4 items-center">
            <button
             onClick={toggleRepeatMode}
-            className={`p-3 transition-colors rounded-full ${repeatClassName}`}
+            className={`p-4 transition-colors rounded-full justify-self-center ${repeatClassName}`}
             title={repeatTitle}
           >
-            <RepeatIcon size={24} />
-          </button>
-          <button
-            onClick={stopTimer}
-            className="p-3 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-slate-700"
-            title="Stop Timer"
-          >
-            <Square size={24} />
-          </button>
-          <button
-            onClick={() => (isPaused ? resumeTimer() : pauseTimer())}
-            className="p-5 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all mx-2"
-            title={isPaused ? "Play" : "Pause"}
-          >
-            {isPaused ? <Play size={32} className="ml-1" /> : <Pause size={32} />}
+            <RepeatIcon size={26} />
           </button>
           <button
             onClick={skipTask}
-            className="p-3 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-slate-700"
+            className="p-4 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-slate-700 justify-self-center"
             title="Skip Task"
           >
-            <SkipForward size={24} />
+            <SkipForward size={26} />
           </button>
+          <button
+            onClick={() => (isPaused ? resumeTimer() : pauseTimer())}
+            className="p-6 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all justify-self-center"
+            title={isPaused ? "Play" : "Pause"}
+          >
+            {isPaused ? <Play size={36} className="ml-1" /> : <Pause size={36} />}
+          </button>
+          <button
+            onClick={stopTimer}
+            className="p-4 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-slate-700 justify-self-center"
+            title="Stop Timer"
+          >
+            <Square size={26} />
+          </button>
+           <div />
         </div>
       </div>
     </div>
