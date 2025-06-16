@@ -1,0 +1,100 @@
+
+C:\Users\Name\Documents\todo-timer>npm run tauri dev
+
+> todo-timer@0.1.0 tauri
+> tauri dev
+
+     Running BeforeDevCommand (`npm run dev`)
+     Running DevCommand (`cargo  run --no-default-features --color always --`)
+        Info Watching C:\Users\Name\Documents\todo-timer\src-tauri for changes...
+
+> todo-timer@0.1.0 dev
+> vite
+
+
+  VITE v4.5.14  ready in 1593 ms
+
+  ➜  Local:   http://localhost:1420/
+  ➜  Network: use --host to expose
+   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
+error[E0432]: unresolved imports `tauri::CustomMenuItem`, `tauri::SystemTray`, `tauri::SystemTrayEvent`, `tauri::SystemTrayMenu`
+ --> src\main.rs:6:13
+  |
+6 | use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+  |             ^^^^^^^^^^^^^^           ^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^ no `SystemTrayMenu` in the root
+  |             |                        |           |
+  |             |                        |           no `SystemTrayEvent` in the root
+  |             |                        no `SystemTray` in the root
+  |             no `CustomMenuItem` in the root
+
+warning: unused import: `Manager`
+ --> src\main.rs:6:29
+  |
+6 | use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+  |                             ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+error[E0277]: the trait bound `tauri::Window: raw_window_handle::HasRawWindowHandle` is not satisfied
+   --> src\main.rs:14:17
+    |
+14  |     set_shadow(&window, shadow).unwrap();
+    |     ----------  ^^^^^^ the trait `raw_window_handle::HasRawWindowHandle` is not implemented for `tauri::Window`
+    |     |
+    |     required by a bound introduced by this call
+    |
+help: trait impl with same name found
+   --> C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\raw-window-handle-0.6.2\src\lib.rs:85:1
+    |
+85  | unsafe impl<T: HasWindowHandle + ?Sized> HasRawWindowHandle for T {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: perhaps two different versions of crate `raw_window_handle` are being used?
+note: there are multiple different versions of crate `raw_window_handle` in the dependency graph
+   --> C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\raw-window-handle-0.5.2\src\lib.rs:77:1
+    |
+77  | pub unsafe trait HasRawWindowHandle {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this is the required trait
+    |
+   ::: src\main.rs:6:5
+    |
+6   | use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+    |     ----- one version of crate `raw_window_handle` used here, as a dependency of crate `tauri`
+7   | use tauri_plugin_store::Builder;
+8   | use window_shadows::set_shadow;
+    |     -------------- one version of crate `raw_window_handle` used here, as a dependency of crate `window_shadows`
+    |
+   ::: C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-2.5.1\src\window\mod.rs:907:1
+    |
+907 | pub struct Window<R: Runtime> {
+    | ----------------------------- this type doesn't implement the required trait
+    |
+   ::: C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\raw-window-handle-0.6.2\src\borrowed.rs:33:1
+    |
+33  | pub trait HasDisplayHandle {
+    | -------------------------- this is the found trait
+    = help: you can use `cargo tree` to explore your dependency tree
+    = note: required for `&tauri::Window` to implement `raw_window_handle::HasRawWindowHandle`
+note: required by a bound in `set_shadow`
+   --> C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\window-shadows-0.2.2\src\lib.rs:31:18
+    |
+30  | pub fn set_shadow(
+    |        ---------- required by a bound in this function
+31  |     window: impl raw_window_handle::HasRawWindowHandle,
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `set_shadow`
+
+error[E0599]: no method named `system_tray` found for struct `tauri::Builder` in the current scope
+  --> src\main.rs:30:10
+   |
+27 | /     tauri::Builder::default()
+28 | |         .plugin(Builder::default().build())
+29 | |         .plugin(tauri_plugin_shell::init())
+30 | |         .system_tray(system_tray)
+   | |         -^^^^^^^^^^^ method not found in `Builder<Wry<EventLoopMessage>>`
+   | |_________|
+   |
+
+Some errors have detailed explanations: E0277, E0432, E0599.
+For more information about an error, try `rustc --explain E0277`.
+warning: `todo-timer` (bin "todo-timer") generated 1 warning
+error: could not compile `todo-timer` (bin "todo-timer") due to 3 previous errors; 1 warning emitted
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? y

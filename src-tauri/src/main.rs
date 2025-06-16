@@ -6,6 +6,7 @@
 use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri_plugin_store::Builder;
 use window_shadows::set_shadow;
+use tauri_plugin_shell;
 
 #[tauri::command]
 fn set_window_shadow(window: tauri::Window, shadow: bool) {
@@ -25,6 +26,7 @@ fn main() {
 
     tauri::Builder::default()
         .plugin(Builder::default().build())
+        .plugin(tauri_plugin_shell::init())
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => {
