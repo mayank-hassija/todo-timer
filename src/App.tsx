@@ -30,6 +30,12 @@ function App() {
     reorderTasks(result.source.index, result.destination.index);
   };
 
+  const openDeleteConfirmation = () => {
+    if (tasks.length > 0) {
+      setShowDeleteConfirm(true);
+    }
+  };
+
   if (isTimerRunning && tasks.length > 0 && currentTaskIndex !== null) {
     const currentTask = tasks[currentTaskIndex];
     return (
@@ -49,6 +55,7 @@ function App() {
       <div className="mt-4 flex-grow min-h-5-tasks overflow-y-auto">
         <TaskList
           handleDragEnd={handleDragEnd}
+          onDeleteAllClick={openDeleteConfirmation}
         />
       </div>
 

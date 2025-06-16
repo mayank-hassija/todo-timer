@@ -4,7 +4,6 @@
 )]
 
 use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
-use tauri::api::notification::Notification;
 use window_shadows::set_shadow;
 
 #[tauri::command]
