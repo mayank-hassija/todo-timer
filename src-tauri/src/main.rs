@@ -28,14 +28,14 @@ fn main() {
                         app.exit(0);
                     }
                     "show" => {
-                        if let Some(window) = app.get_window("main") {
+                        if let Some(window) = app.get_webview_window("main") {
                             window.show().ok();
                             window.set_focus().ok();
                         }
                     }
                     _ => {}
                 })
-                .on_tray_event(|tray, event| {
+                .on_tray_icon_event(|tray, event| {
                     if let TrayIconEvent::Click { .. } = event {
                         let app = tray.app_handle();
                         if let Some(window) = app.get_webview_window("main") {
