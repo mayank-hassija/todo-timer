@@ -24,6 +24,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   currentTaskIndex,
   handleDragEnd,
   handleTaskClick,
+  
   handleEditTask,
   removeTask,
   remainingTime,

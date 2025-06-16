@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Task, RepeatMode } from '../types';
 
-interface TimerState {
+export interface TimerState {
   tasks: Task[];
   currentTaskIndex: number | null;
   isTimerRunning: boolean;
