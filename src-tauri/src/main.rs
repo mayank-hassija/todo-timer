@@ -3,50 +3,50 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
-use tauri_plugin_store::Builder;
-use window_shadows::set_shadow;
+use tauri::{
+    menu::{Menu, MenuItem},
+    tray::{TrayIconBuilder, TrayIconEvent},
+    Manager,
+};
 use tauri_plugin_shell;
-
-#[tauri::command]
-fn set_window_shadow(window: tauri::Window, shadow: bool) {
-    #[cfg(any(windows, target_os = "macos"))]
-    set_shadow(&window, shadow).unwrap();
-}
+use tauri_plugin_store::Builder;
 
 fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let show = CustomMenuItem::new("show".to_string(), "Show");
-    
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(show)
-        
-        .add_item(quit);
-    let system_tray = SystemTray::new().with_menu(tray_menu);
-
     tauri::Builder::default()
         .plugin(Builder::default().build())
         .plugin(tauri_plugin_shell::init())
-        .system_tray(system_tray)
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => {
-                match id.as_str() {
-                    "quit" => std::process::exit(0),
+        .setup(|app| {
+            let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+            let show = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;
+
+            let menu = Menu::with_items(app, &[&show, &quit])?;
+
+            let _tray = TrayIconBuilder::new()
+                .menu(&menu)
+                .on_menu_event(move |app, event| match event.id.as_ref() {
+                    "quit" => {
+                        app.exit(0);
+                    }
                     "show" => {
                         if let Some(window) = app.get_window("main") {
                             window.show().ok();
                             window.set_focus().ok();
                         }
                     }
-                    
                     _ => {}
-                }
-            }
-            _ => {} // Handle any other system tray events
+                })
+                .on_tray_event(|tray, event| {
+                    if let TrayIconEvent::Click { .. } = event {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .build(app)?;
+            Ok(())
         })
-        .invoke_handler(tauri::generate_handler![
-            set_window_shadow,
-        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

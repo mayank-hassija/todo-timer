@@ -21,7 +21,9 @@
         "label": "main",
         "alwaysOnTop": true,
         "minimizable": false,
-        "maximizable": false
+        "maximizable": false,
+        "decorations": false,
+        "shadow": true
       }
     ],
     "trayIcon": {
