@@ -74,10 +74,10 @@ export const TaskForm: React.FC = () => {
         value={newTaskName}
         onChange={(e) => setNewTaskName(e.target.value)}
         onKeyDown={handleTaskNameKeyDown}
-        placeholder="Name"
-        className="w-4/6 px-3 py-1 bg-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-400 text-sm"
+        placeholder="Enter a task name..."
+        className="flex-grow p-2 bg-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-400 text-sm"
       />
-      <div className="flex flex-col w-2/6">
+      <div className="flex flex-col">
         <input
           ref={durationInputRef}
           type="number"
@@ -85,13 +85,13 @@ export const TaskForm: React.FC = () => {
           onChange={handleDurationChange}
           onKeyDown={handleDurationKeyDown}
           placeholder="Mins"
-          className="px-3 py-1 bg-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-400 no-arrows text-sm"
+          className="w-24 p-2 bg-gray-700 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-white placeholder-gray-400 no-arrows text-sm"
           min="1"
         />
         {durationError && <p className="text-red-500 text-xs mt-1">{durationError}</p>}
       </div>
       {editingTaskId && (
-        <button onClick={addOrUpdateTask} className="px-3 py-1 bg-green-500 text-white rounded">
+        <button onClick={addOrUpdateTask} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
           Update
         </button>
       )}

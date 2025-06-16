@@ -61,14 +61,14 @@ export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`flex items-center justify-between bg-gray-700 p-3 rounded transition-all group cursor-grab active:cursor-grabbing text-sm ${
+                            className={`flex items-center justify-between bg-gray-700 p-2 rounded transition-all group cursor-grab active:cursor-grabbing text-sm ${
                               isRunning ? 'ring-2 ring-green-500' : ''
                             } ${snapshot.isDragging ? 'shadow-lg scale-105' : ''}`}
                           >
-                            <div className="flex items-center gap-3 flex-1">
+                            <div className="flex items-center gap-2 flex-1">
                               <div className="flex-1 cursor-pointer" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
                                 <span className="font-medium block truncate">{task.name}</span>
-                                <span className="text-gray-400 ml-2 whitespace-nowrap">({task.duration} min)</span>
+                                <span className="text-gray-400 ml-2 whitespace-nowrap text-xs">({task.duration} min)</span>
                                 {isRunning && (
                                   <div
                                     className="w-full bg-gray-600 rounded-full h-1.5 mt-1.5 cursor-pointer"

@@ -33,13 +33,15 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gray-900 text-white p-4">
-      <TaskForm />
-      
-      <div className="mt-4 flex-grow overflow-y-auto">
-        <TaskList
-          handleDragEnd={handleDragEnd}
-        />
+    <div className="flex flex-col h-screen bg-gray-900 text-white container mx-auto p-4 md:p-6 lg:p-8">
+      <div className="w-full max-w-2xl mx-auto">
+        <TaskForm />
+        
+        <div className="mt-4 flex-grow overflow-y-auto">
+          <TaskList
+            handleDragEnd={handleDragEnd}
+          />
+        </div>
       </div>
     </div>
   );

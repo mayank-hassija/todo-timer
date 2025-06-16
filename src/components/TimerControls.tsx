@@ -65,39 +65,39 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
   const { Icon: RepeatIcon, title: repeatTitle, className: repeatClassName } = getRepeatProps();
 
   return (
-    <div className="flex flex-col justify-around h-full p-4 bg-gray-900 text-white">
+    <div className="flex flex-col justify-between h-full p-6 bg-gray-900 text-white">
       <div className="flex justify-between items-center w-full">
-        <h2 className="text-lg font-semibold truncate" title={taskName}>
+        <h2 className="text-xl font-semibold truncate" title={taskName}>
           {taskName}
         </h2>
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-3">
           <button
             onClick={toggleRepeatMode}
-            className={`p-1 transition-colors rounded-full ${repeatClassName}`}
+            className={`p-2 transition-colors rounded-full ${repeatClassName}`}
             title={repeatTitle}
           >
-            <RepeatIcon size={18} />
+            <RepeatIcon size={20} />
           </button>
           <button
             onClick={skipTask}
-            className="p-1 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
+            className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
             title="Skip Task"
           >
-            <SkipForward size={18} />
+            <SkipForward size={20} />
           </button>
           <button
             onClick={stopTimer}
-            className="p-1 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
+            className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
             title="Stop Timer"
           >
-            <Square size={18} />
+            <Square size={20} />
           </button>
           <button
             onClick={() => (isPaused ? resumeTimer() : pauseTimer())}
-            className="p-1.5 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all"
+            className="p-2.5 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all"
             title={isPaused ? "Play" : "Pause"}
           >
-            {isPaused ? <Play size={22} className="ml-0.5" /> : <Pause size={22} />}
+            {isPaused ? <Play size={24} className="ml-0.5" /> : <Pause size={24} />}
           </button>
         </div>
       </div>
@@ -112,7 +112,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
-        <div className="flex justify-between items-center mt-1 text-xs text-gray-400 font-mono">
+        <div className="flex justify-between items-center mt-2 text-xs text-gray-400 font-mono">
           <span>{formatTime(elapsedTime)}</span>
           <span>{formatTime(totalDuration)}</span>
         </div>

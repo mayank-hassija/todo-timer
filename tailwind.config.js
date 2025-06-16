@@ -1,5 +1,3 @@
-const plugin = require('tailwindcss/plugin')
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -9,18 +7,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        'dark-bg': '#1a1a1a',
-        'dark-surface': '#2d2d2d',
-        'dark-primary': '#0078d4',
-        'dark-secondary': '#3c3c3c',
-        'win11': {
-          'bg': '#202020',
-          'surface': '#2d2d2d',
-          'text': '#ffffff',
-          'text-secondary': '#a0a0a0',
-          'accent': '#0078d4',
-          'accent-hover': '#106ebe',
-        }
+        gray: {
+          900: '#111827',
+          800: '#1f2937',
+          700: '#374151',
+          600: '#4b5563',
+          500: '#6b7280',
+          400: '#9ca3af',
+          300: '#d1d5db',
+        },
+        blue: {
+          600: '#2563eb',
+          500: '#3b82f6',
+        },
       },
       fontFamily: {
         'sans': ['Segoe UI', 'system-ui', '-apple-system', 'sans-serif'],
@@ -30,21 +29,5 @@ export default {
       }
     },
   },
-  plugins: [
-    plugin(function({ addUtilities }) {
-      addUtilities({
-        '.no-arrows': {
-          '-moz-appearance': 'textfield',
-          '&::-webkit-inner-spin-button': {
-            '-webkit-appearance': 'none',
-            margin: '0'
-          },
-          '&::-webkit-outer-spin-button': {
-            '-webkit-appearance': 'none',
-            margin: '0'
-          }
-        }
-      })
-    })
-  ],
+  plugins: [],
 } 
