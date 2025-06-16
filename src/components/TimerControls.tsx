@@ -4,7 +4,7 @@ import { RepeatMode } from '../types';
 
 interface TimerControlsProps {
   isPaused: boolean;
-  setIsPaused: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsPaused: (paused: boolean) => void;
   handleSkipTask: () => void;
   stopTimer: () => void;
   remainingTime: number;
@@ -101,7 +101,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
             <Square size={18} />
           </button>
           <button
-            onClick={() => setIsPaused(prev => !prev)}
+            onClick={() => setIsPaused(!isPaused)}
             className="p-1.5 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all"
             title={isPaused ? "Play" : "Pause"}
           >
