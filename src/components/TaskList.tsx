@@ -1,38 +1,28 @@
 import React from 'react';
 import { DragDropContext, Droppable, Draggable, type DropResult, type DroppableProvided, type DraggableProvided } from '@hello-pangea/dnd';
-import { Check, Edit, Minus, Pause, Play, Repeat, SkipForward, Trash2 } from 'lucide-react';
-import { Task } from '../types';
+import { Edit, Trash2 } from 'lucide-react';
+import { useTaskStore } from '../store/useTaskStore';
+import { useTimerStore } from '../store/useTimerStore';
+import { useTaskManager } from '../hooks/useTaskManager';
 
 interface TaskListProps {
-  tasks: Task[];
-  isTimerRunning: boolean;
-  currentTaskIndex: number;
   handleDragEnd: (result: DropResult) => void;
-  handleTaskClick: (taskId: string) => void;
-  handleEditTask: (task: Task) => void;
-  removeTask: (id: string) => void;
-  remainingTime: number;
-  isPaused: boolean;
-  setIsPaused: (paused: boolean) => void;
-  handleSkipTask: () => void;
-  onSeek: (newTime: number) => void;
 }
 
-export const TaskList: React.FC<TaskListProps> = ({
-  tasks,
-  isTimerRunning,
-  currentTaskIndex,
-  handleDragEnd,
-  handleTaskClick,
-  
-  handleEditTask,
-  removeTask,
-  remainingTime,
-  isPaused,
-  setIsPaused,
-  handleSkipTask,
-  onSeek,
-}) => {
+export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
+  const { tasks, removeTask } = useTaskStore();
+  const { 
+    isTimerRunning, 
+    currentTaskIndex, 
+    remainingTime, 
+    isPaused, 
+    pauseTimer, 
+    resumeTimer, 
+    skipTask, 
+    setRemainingTime 
+  } = useTimerStore();
+  const { handleEditTask, handleTaskClick } = useTaskManager();
+
   const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>, totalDuration: number) => {
     if (totalDuration === 0) return;
 
@@ -45,7 +35,7 @@ export const TaskList: React.FC<TaskListProps> = ({
     const newElapsedTime = Math.floor(totalDuration * clickPercentage);
     const newRemainingTime = totalDuration - newElapsedTime;
     
-    onSeek(newRemainingTime);
+    setRemainingTime(newRemainingTime);
   };
 
   return (
@@ -94,7 +84,7 @@ export const TaskList: React.FC<TaskListProps> = ({
 
                           {isRunning ? (
                             <div className="flex items-center gap-2">
-                               <button onClick={() => setIsPaused(!isPaused)} className="p-2 text-yellow-400 hover:text-yellow-300" title={isPaused ? "Play" : "Pause"}>
+                               <button onClick={() => isPaused ? resumeTimer() : pauseTimer()} className="p-2 text-yellow-400 hover:text-yellow-300" title={isPaused ? "Play" : "Pause"}>
                                 {isPaused ? (
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
@@ -105,7 +95,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                                   </svg>
                                 )}
                               </button>
-                              <button onClick={handleSkipTask} className="p-2 text-blue-400 hover:text-blue-300" title="Skip Task">
+                              <button onClick={skipTask} className="p-2 text-blue-400 hover:text-blue-300" title="Skip Task">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                   <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.168V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.832L4.555 5.168z" />
                                 </svg>

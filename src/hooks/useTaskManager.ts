@@ -1,18 +1,11 @@
 import { useState, useRef, type KeyboardEvent } from 'react';
+import { useTaskStore } from '../store/useTaskStore';
 import { useTimerStore } from '../store/useTimerStore';
 import { type Task } from '../types';
 
-export function useTaskManager({ setView }: { setView: (compact: boolean) => void; }) {
-  const tasks = useTimerStore((state) => state.tasks);
-  const { 
-    addTask, 
-    updateTask, 
-    startTimer, 
-    stopTimer: stopTimerAction,
-    reorderTasks,
-    removeTask,
-    setTasks,
-  } = useTimerStore();
+export function useTaskManager() {
+  const { tasks, addTask, updateTask, reorderTasks, removeTask, setTasks } = useTaskStore();
+  const { startTimer, stopTimer: stopTimerAction } = useTimerStore();
 
   const [newTaskName, setNewTaskName] = useState('');
   const [taskDuration, setTaskDuration] = useState<number | ''>('');
@@ -39,7 +32,6 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
   const startTimerFromIndex = (index: number) => {
     if (tasks.length === 0 || index >= tasks.length) return;
     startTimer(index);
-    setView(true);
   };
 
   const handleTaskClick = (taskId: string) => {
@@ -80,11 +72,6 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
       }
     }
   };
-  
-  const stopTimer = () => {
-    stopTimerAction();
-    setView(false);
-  };
 
   return {
     tasks,
@@ -101,7 +88,7 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
     cancelEdit,
     handleTaskNameKeyDown,
     handleDurationKeyDown,
-    stopTimer,
+    stopTimer: stopTimerAction,
     reorderTasks,
     removeTask,
     setTasks,

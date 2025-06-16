@@ -1,30 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTaskManager } from '../hooks/useTaskManager';
 
-interface TaskFormProps {
-  taskNameInputRef: React.RefObject<HTMLInputElement>;
-  durationInputRef: React.RefObject<HTMLInputElement>;
-  newTaskName: string;
-  setNewTaskName: (name: string) => void;
-  taskDuration: number | '';
-  setTaskDuration: (duration: number | '') => void;
-  handleTaskNameKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  handleDurationKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  editingTaskId: string | null;
-  cancelEdit: () => void;
-}
+export const TaskForm: React.FC = () => {
+  const {
+    newTaskName,
+    setNewTaskName,
+    taskDuration,
+    setTaskDuration,
+    editingTaskId,
+    taskNameInputRef,
+    durationInputRef,
+    addOrUpdateTask,
+    cancelEdit,
+    handleTaskNameKeyDown,
+    handleDurationKeyDown,
+  } = useTaskManager();
 
-export const TaskForm: React.FC<TaskFormProps> = ({
-  taskNameInputRef,
-  durationInputRef,
-  newTaskName,
-  setNewTaskName,
-  taskDuration,
-  setTaskDuration,
-  handleTaskNameKeyDown,
-  handleDurationKeyDown,
-  editingTaskId,
-  cancelEdit,
-}) => {
   const [durationError, setDurationError] = useState('');
   const formRef = useRef<HTMLDivElement>(null);
 

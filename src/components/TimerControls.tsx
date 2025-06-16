@@ -1,34 +1,26 @@
 import React from 'react';
 import { Play, Pause, SkipForward, Repeat, Square, Repeat1 } from 'lucide-react';
-import { RepeatMode } from '../types';
+import { useTimerStore } from '../store/useTimerStore';
+import { formatTime } from '../utils';
 
 interface TimerControlsProps {
-  isPaused: boolean;
-  setIsPaused: (paused: boolean) => void;
-  handleSkipTask: () => void;
-  stopTimer: () => void;
-  remainingTime: number;
-  formatTime: (seconds: number) => string;
   taskName: string;
-  repeatMode: RepeatMode;
-  toggleRepeatMode: () => void;
   totalDuration: number;
-  onSeek: (newTime: number) => void;
 }
 
-export const TimerControls: React.FC<TimerControlsProps> = ({
-  isPaused,
-  setIsPaused,
-  handleSkipTask,
-  stopTimer,
-  remainingTime,
-  formatTime,
-  taskName,
-  repeatMode,
-  toggleRepeatMode,
-  totalDuration,
-  onSeek,
-}) => {
+export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDuration }) => {
+  const {
+    isPaused,
+    pauseTimer,
+    resumeTimer,
+    skipTask,
+    stopTimer,
+    remainingTime,
+    repeatMode,
+    toggleRepeatMode,
+    setRemainingTime,
+  } = useTimerStore();
+
   const elapsedTime = totalDuration - remainingTime;
   const progressPercentage = totalDuration > 0 ? (elapsedTime / totalDuration) * 100 : 0;
 
@@ -44,7 +36,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
     const newElapsedTime = Math.floor(totalDuration * clickPercentage);
     const newRemainingTime = totalDuration - newElapsedTime;
     
-    onSeek(newRemainingTime);
+    setRemainingTime(newRemainingTime);
   };
 
   const getRepeatProps = () => {
@@ -87,7 +79,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
             <RepeatIcon size={18} />
           </button>
           <button
-            onClick={handleSkipTask}
+            onClick={skipTask}
             className="p-1 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-gray-700"
             title="Skip Task"
           >
@@ -101,7 +93,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
             <Square size={18} />
           </button>
           <button
-            onClick={() => setIsPaused(!isPaused)}
+            onClick={() => (isPaused ? resumeTimer() : pauseTimer())}
             className="p-1.5 bg-blue-600 rounded-full text-white hover:bg-blue-500 shadow-lg transition-all"
             title={isPaused ? "Play" : "Pause"}
           >
