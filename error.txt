@@ -1,3 +1,22 @@
+Microsoft Windows [Version 10.0.26100.4061]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Name\Documents\todo-timer>npm i
+
+up to date, audited 400 packages in 3s
+
+151 packages are looking for funding
+  run `npm fund` for details
+
+3 vulnerabilities (1 low, 2 moderate)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
 
 C:\Users\Name\Documents\todo-timer>npm run tauri dev
 
@@ -12,89 +31,41 @@ C:\Users\Name\Documents\todo-timer>npm run tauri dev
 > vite
 
 
-  VITE v4.5.14  ready in 1593 ms
+  VITE v4.5.14  ready in 1514 ms
 
   ➜  Local:   http://localhost:1420/
   ➜  Network: use --host to expose
    Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
-error[E0432]: unresolved imports `tauri::CustomMenuItem`, `tauri::SystemTray`, `tauri::SystemTrayEvent`, `tauri::SystemTrayMenu`
- --> src\main.rs:6:13
-  |
-6 | use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
-  |             ^^^^^^^^^^^^^^           ^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^ no `SystemTrayMenu` in the root
-  |             |                        |           |
-  |             |                        |           no `SystemTrayEvent` in the root
-  |             |                        no `SystemTray` in the root
-  |             no `CustomMenuItem` in the root
-
-warning: unused import: `Manager`
- --> src\main.rs:6:29
-  |
-6 | use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
-  |                             ^^^^^^^
-  |
-  = note: `#[warn(unused_imports)]` on by default
-
-error[E0277]: the trait bound `tauri::Window: raw_window_handle::HasRawWindowHandle` is not satisfied
-   --> src\main.rs:14:17
-    |
-14  |     set_shadow(&window, shadow).unwrap();
-    |     ----------  ^^^^^^ the trait `raw_window_handle::HasRawWindowHandle` is not implemented for `tauri::Window`
-    |     |
-    |     required by a bound introduced by this call
-    |
-help: trait impl with same name found
-   --> C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\raw-window-handle-0.6.2\src\lib.rs:85:1
-    |
-85  | unsafe impl<T: HasWindowHandle + ?Sized> HasRawWindowHandle for T {
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    = note: perhaps two different versions of crate `raw_window_handle` are being used?
-note: there are multiple different versions of crate `raw_window_handle` in the dependency graph
-   --> C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\raw-window-handle-0.5.2\src\lib.rs:77:1
-    |
-77  | pub unsafe trait HasRawWindowHandle {
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this is the required trait
-    |
-   ::: src\main.rs:6:5
-    |
-6   | use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
-    |     ----- one version of crate `raw_window_handle` used here, as a dependency of crate `tauri`
-7   | use tauri_plugin_store::Builder;
-8   | use window_shadows::set_shadow;
-    |     -------------- one version of crate `raw_window_handle` used here, as a dependency of crate `window_shadows`
-    |
-   ::: C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-2.5.1\src\window\mod.rs:907:1
-    |
-907 | pub struct Window<R: Runtime> {
-    | ----------------------------- this type doesn't implement the required trait
-    |
-   ::: C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\raw-window-handle-0.6.2\src\borrowed.rs:33:1
-    |
-33  | pub trait HasDisplayHandle {
-    | -------------------------- this is the found trait
-    = help: you can use `cargo tree` to explore your dependency tree
-    = note: required for `&tauri::Window` to implement `raw_window_handle::HasRawWindowHandle`
-note: required by a bound in `set_shadow`
-   --> C:\Users\Name\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\window-shadows-0.2.2\src\lib.rs:31:18
-    |
-30  | pub fn set_shadow(
-    |        ---------- required by a bound in this function
-31  |     window: impl raw_window_handle::HasRawWindowHandle,
-    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `set_shadow`
-
-error[E0599]: no method named `system_tray` found for struct `tauri::Builder` in the current scope
-  --> src\main.rs:30:10
+error[E0599]: no method named `get_window` found for reference `&AppHandle<_>` in the current scope
+  --> src\main.rs:31:51
    |
-27 | /     tauri::Builder::default()
-28 | |         .plugin(Builder::default().build())
-29 | |         .plugin(tauri_plugin_shell::init())
-30 | |         .system_tray(system_tray)
-   | |         -^^^^^^^^^^^ method not found in `Builder<Wry<EventLoopMessage>>`
-   | |_________|
+31 |                         if let Some(window) = app.get_window("main") {
+   |                                                   ^^^^^^^^^^
    |
+help: there is a method `get_webview_window` with a similar name
+   |
+31 |                         if let Some(window) = app.get_webview_window("main") {
+   |                                                        ++++++++
 
-Some errors have detailed explanations: E0277, E0432, E0599.
-For more information about an error, try `rustc --explain E0277`.
-warning: `todo-timer` (bin "todo-timer") generated 1 warning
-error: could not compile `todo-timer` (bin "todo-timer") due to 3 previous errors; 1 warning emitted
-Terminate batch job (Y/N)? Terminate batch job (Y/N)? y
+error[E0599]: no method named `on_tray_event` found for struct `TrayIconBuilder` in the current scope
+  --> src\main.rs:38:18
+   |
+24 |               let _tray = TrayIconBuilder::new()
+   |  _________________________-
+25 | |                 .menu(&menu)
+26 | |                 .on_menu_event(move |app, event| match event.id.as_ref() {
+27 | |                     "quit" => {
+...  |
+37 | |                 })
+38 | |                 .on_tray_event(|tray, event| {
+   | |_________________-^^^^^^^^^^^^^
+   |
+help: there is a method `on_tray_icon_event` with a similar name
+   |
+38 |                 .on_tray_icon_event(|tray, event| {
+   |                          +++++
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `todo-timer` (bin "todo-timer") due to 2 previous errors
+
+
