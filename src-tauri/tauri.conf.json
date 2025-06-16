@@ -43,9 +43,6 @@
     ]
   },
   "plugins": {
-    "notification": {
-      "icon": "icons/icon.png"
-    },
     "shell": {}
   }
 }
