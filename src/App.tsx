@@ -72,7 +72,7 @@ function App() {
           isPaused={isPaused}
           setIsPaused={(paused: boolean) => paused ? pauseTimer() : resumeTimer()}
           handleSkipTask={skipTask}
-          stopTimer={stopTimer}
+          stopTimer={stopTimerAction}
           remainingTime={remainingTime}
           formatTime={formatTime}
           taskName={currentTask?.name}

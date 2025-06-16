@@ -84,7 +84,7 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
   const stopTimer = () => {
     stopTimerAction();
     setView(false);
-  }
+  };
 
   return {
     tasks,
