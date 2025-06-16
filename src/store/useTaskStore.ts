@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist, StateCreator } from 'zustand/middleware';
+import { create, StateCreator } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Task } from '../types';
 
 export interface TaskState {
@@ -13,23 +13,23 @@ export interface TaskState {
 
 const taskStateCreator: StateCreator<TaskState> = (set) => ({
   tasks: [],
-  setTasks: (tasks) => set({ tasks }),
-  addTask: (task) =>
-    set((state) => ({
+  setTasks: (tasks: Task[]) => set({ tasks }),
+  addTask: (task: Omit<Task, 'id'>) =>
+    set((state: TaskState) => ({
       tasks: [...state.tasks, { ...task, id: Date.now().toString() }],
     })),
-  updateTask: (taskId, updates) =>
-    set((state) => ({
-      tasks: state.tasks.map((t) =>
+  updateTask: (taskId: string, updates: Partial<Task>) =>
+    set((state: TaskState) => ({
+      tasks: state.tasks.map((t: Task) =>
         t.id === taskId ? { ...t, ...updates } : t
       ),
     })),
-  removeTask: (taskId) =>
-    set((state) => ({
-      tasks: state.tasks.filter((t) => t.id !== taskId),
+  removeTask: (taskId: string) =>
+    set((state: TaskState) => ({
+      tasks: state.tasks.filter((t: Task) => t.id !== taskId),
     })),
-  reorderTasks: (startIndex, endIndex) =>
-    set((state) => {
+  reorderTasks: (startIndex: number, endIndex: number) =>
+    set((state: TaskState) => {
       const newTasks = Array.from(state.tasks);
       const [reorderedItem] = newTasks.splice(startIndex, 1);
       newTasks.splice(endIndex, 0, reorderedItem);

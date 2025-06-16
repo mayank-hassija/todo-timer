@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist, StateCreator } from 'zustand/middleware';
+import { create, StateCreator } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { RepeatMode, Task } from '../types';
 import { useTaskStore } from './useTaskStore';
 
@@ -25,7 +25,7 @@ const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
   isPaused: false,
   remainingTime: 0,
   repeatMode: 'off',
-  startTimer: (taskIndex) => {
+  startTimer: (taskIndex: number) => {
     const tasks = useTaskStore.getState().tasks;
     if (taskIndex < tasks.length) {
       set({
@@ -70,16 +70,16 @@ const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
   },
   tick: () => {
     if (get().remainingTime > 1) {
-      set((state) => ({ remainingTime: state.remainingTime - 1 }));
+      set((state: TimerState) => ({ remainingTime: state.remainingTime - 1 }));
     } else {
       get().skipTask();
     }
   },
-  toggleRepeatMode: () => set((state) => {
+  toggleRepeatMode: () => set((state: TimerState) => {
     const nextMode: RepeatMode = state.repeatMode === 'off' ? 'current' : state.repeatMode === 'current' ? 'all' : 'off';
     return { repeatMode: nextMode };
   }),
-  setRemainingTime: (time) => set({ remainingTime: time }),
+  setRemainingTime: (time: number) => set({ remainingTime: time }),
 });
 
 export const useTimerStore = create<TimerState>()(
