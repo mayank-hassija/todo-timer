@@ -105,6 +105,9 @@ function App() {
   }
 
   const handleTaskCompletion = () => {
+    const audio = new Audio('/sound.mp3');
+    audio.play().catch(e => console.error("Error playing sound:", e));
+
     const nextIndex = currentTaskIndex + 1
     if (nextIndex < tasks.length) {
       setCurrentTaskIndex(nextIndex)
@@ -238,6 +241,12 @@ function App() {
     setView(false);
   }
 
+  const handleSeek = (newTime: number) => {
+    if (isTimerRunning) {
+      setRemainingTime(newTime);
+    }
+  };
+
   if (isTimerRunning && tasks.length > 0) {
     const currentTask = tasks[currentTaskIndex];
     return (
@@ -253,6 +262,7 @@ function App() {
           repeatLoop={repeatLoop}
           setRepeatLoop={setRepeatLoop}
           totalDuration={currentTask?.duration * 60}
+          onSeek={handleSeek}
         />
       </div>
     )
@@ -288,6 +298,7 @@ function App() {
           isPaused={isPaused}
           setIsPaused={setIsPaused}
           handleSkipTask={handleSkipTask}
+          onSeek={handleSeek}
         />
       </div>
 

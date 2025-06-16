@@ -17,6 +17,7 @@ interface TaskListProps {
   isPaused: boolean;
   setIsPaused: (paused: boolean) => void;
   handleSkipTask: () => void;
+  onSeek: (newTime: number) => void;
 }
 
 export const TaskList: React.FC<TaskListProps> = ({
@@ -33,7 +34,23 @@ export const TaskList: React.FC<TaskListProps> = ({
   isPaused,
   setIsPaused,
   handleSkipTask,
+  onSeek,
 }) => {
+  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>, totalDuration: number) => {
+    if (totalDuration === 0) return;
+
+    const progressBar = e.currentTarget;
+    const rect = progressBar.getBoundingClientRect();
+    const clickPositionX = e.clientX - rect.left;
+    const progressBarWidth = progressBar.offsetWidth;
+    const clickPercentage = Math.max(0, Math.min(1, clickPositionX / progressBarWidth));
+    
+    const newElapsedTime = Math.floor(totalDuration * clickPercentage);
+    const newRemainingTime = totalDuration - newElapsedTime;
+    
+    onSeek(newRemainingTime);
+  };
+
   return (
     <div>
       {tasks.length === 0 ? (
@@ -45,6 +62,9 @@ export const TaskList: React.FC<TaskListProps> = ({
               <ul className="space-y-2" {...provided.droppableProps} ref={provided.innerRef}>
                 {tasks.map((task, index) => {
                   const isRunning = isTimerRunning && index === currentTaskIndex;
+                  const totalDuration = task.duration * 60;
+                  const elapsedTime = totalDuration - remainingTime;
+                  const progressPercentage = totalDuration > 0 ? (elapsedTime / totalDuration) * 100 : 0;
 
                   return (
                     <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -62,10 +82,13 @@ export const TaskList: React.FC<TaskListProps> = ({
                               <span className="font-medium block truncate">{task.name}</span>
                               <span className="text-gray-400 ml-2 whitespace-nowrap">({task.duration} min)</span>
                               {isRunning && (
-                                <div className="w-full bg-gray-600 rounded-full h-1.5 mt-1.5">
+                                <div
+                                  className="w-full bg-gray-600 rounded-full h-1.5 mt-1.5 cursor-pointer"
+                                  onClick={(e) => handleProgressBarClick(e, totalDuration)}
+                                >
                                   <div 
                                     className="bg-green-500 h-1.5 rounded-full" 
-                                    style={{ width: `${(remainingTime / (task.duration * 60)) * 100}%` }}
+                                    style={{ width: `${progressPercentage}%` }}
                                   ></div>
                                 </div>
                               )}

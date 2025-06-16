@@ -12,6 +12,7 @@ interface TimerControlsProps {
   repeatLoop: boolean;
   setRepeatLoop: (repeat: boolean) => void;
   totalDuration: number;
+  onSeek: (newTime: number) => void;
 }
 
 export const TimerControls: React.FC<TimerControlsProps> = ({
@@ -25,9 +26,25 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   repeatLoop,
   setRepeatLoop,
   totalDuration,
+  onSeek,
 }) => {
   const elapsedTime = totalDuration - remainingTime;
   const progressPercentage = totalDuration > 0 ? (elapsedTime / totalDuration) * 100 : 0;
+
+  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (totalDuration === 0) return;
+
+    const progressBar = e.currentTarget;
+    const rect = progressBar.getBoundingClientRect();
+    const clickPositionX = e.clientX - rect.left;
+    const progressBarWidth = progressBar.offsetWidth;
+    const clickPercentage = Math.max(0, Math.min(1, clickPositionX / progressBarWidth));
+    
+    const newElapsedTime = Math.floor(totalDuration * clickPercentage);
+    const newRemainingTime = totalDuration - newElapsedTime;
+    
+    onSeek(newRemainingTime);
+  };
 
   return (
     <div className="flex flex-col justify-around h-full p-4 bg-gray-900 text-white">
@@ -70,7 +87,10 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
       </div>
 
       <div className="w-full">
-        <div className="w-full bg-gray-700 rounded-full h-1">
+        <div
+          className="w-full bg-gray-700 rounded-full h-1 cursor-pointer"
+          onClick={handleProgressBarClick}
+        >
           <div
             className="bg-green-500 h-1 rounded-full"
             style={{ width: `${progressPercentage}%` }}

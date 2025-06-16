@@ -21,7 +21,9 @@
         "minWidth": 360,
         "minHeight": 100,
         "label": "main",
-        "alwaysOnTop": true
+        "alwaysOnTop": true,
+        "minimizable": false,
+        "maximizable": false
       }
     ],
     "systemTray": {
