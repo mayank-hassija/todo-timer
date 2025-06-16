@@ -3,7 +3,7 @@ import { type DropResult } from '@hello-pangea/dnd'
 import { TaskList } from './components/TaskList'
 import { TaskForm } from './components/TaskForm'
 import { TimerControls } from './components/TimerControls'
-import { useTimerStore, type TimerState } from './store/useTimerStore'
+import { useTimerStore } from './store/useTimerStore'
 import { useTimer } from './hooks/useTimer'
 import { useWindowSizeManager } from './hooks/useWindowSizeManager'
 import { useTaskManager } from './hooks/useTaskManager'
@@ -16,14 +16,9 @@ function formatTime(seconds: number): string {
 }
 
 function App() {
-  const { isTimerRunning, currentTaskIndex, remainingTime, isPaused, repeatMode, actions } = useTimerStore((state: TimerState) => ({
-    isTimerRunning: state.isTimerRunning,
-    currentTaskIndex: state.currentTaskIndex,
-    remainingTime: state.remainingTime,
-    isPaused: state.isPaused,
-    repeatMode: state.repeatMode,
-    actions: state.actions
-  }));
+  const { isTimerRunning, currentTaskIndex, remainingTime, isPaused, repeatMode } = useTimerStore();
+  const { pauseTimer, resumeTimer, skipTask, toggleRepeatMode, setRemainingTime, stopTimer: stopTimerAction } = useTimerStore();
+
   const [isCompactView, setIsCompactView] = useState(false);
   const { isScrollable, setView } = useWindowSizeManager(isCompactView, setIsCompactView);
   const {
@@ -41,7 +36,6 @@ function App() {
     cancelEdit,
     handleTaskNameKeyDown,
     handleDurationKeyDown,
-    stopTimer,
     reorderTasks,
     removeTask,
     setTasks,
@@ -54,7 +48,7 @@ function App() {
   const handleDeleteAllTasks = () => {
     setTasks([]);
     setShowDeleteConfirm(false);
-    actions.stopTimer();
+    stopTimerAction();
   };
 
   const handleDragEnd = (result: DropResult) => {
@@ -66,7 +60,7 @@ function App() {
 
   const handleSeek = (newTime: number) => {
     if (isTimerRunning) {
-      actions.setRemainingTime(newTime);
+      setRemainingTime(newTime);
     }
   };
 
@@ -76,14 +70,14 @@ function App() {
       <div className="flex flex-col h-screen bg-gray-900 text-white overflow-y-hidden">
         <TimerControls
           isPaused={isPaused}
-          setIsPaused={(paused: boolean) => paused ? actions.pauseTimer() : actions.resumeTimer()}
-          handleSkipTask={actions.skipTask}
+          setIsPaused={(paused: boolean) => paused ? pauseTimer() : resumeTimer()}
+          handleSkipTask={skipTask}
           stopTimer={stopTimer}
           remainingTime={remainingTime}
           formatTime={formatTime}
           taskName={currentTask?.name}
           repeatMode={repeatMode}
-          toggleRepeatMode={actions.toggleRepeatMode}
+          toggleRepeatMode={toggleRepeatMode}
           totalDuration={currentTask?.duration * 60}
           onSeek={handleSeek}
         />
@@ -117,8 +111,8 @@ function App() {
           currentTaskIndex={currentTaskIndex ?? -1}
           remainingTime={remainingTime}
           isPaused={isPaused}
-          setIsPaused={(paused: boolean) => paused ? actions.pauseTimer() : actions.resumeTimer()}
-          handleSkipTask={actions.skipTask}
+          setIsPaused={(paused: boolean) => paused ? pauseTimer() : resumeTimer()}
+          handleSkipTask={skipTask}
           onSeek={handleSeek}
         />
       </div>

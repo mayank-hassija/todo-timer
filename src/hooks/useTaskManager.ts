@@ -1,12 +1,18 @@
 import { useState, useRef, type KeyboardEvent } from 'react';
-import { useTimerStore, type TimerState } from '../store/useTimerStore';
+import { useTimerStore } from '../store/useTimerStore';
 import { type Task } from '../types';
 
 export function useTaskManager({ setView }: { setView: (compact: boolean) => void; }) {
-  const { tasks, actions } = useTimerStore((state: TimerState) => ({
-    tasks: state.tasks,
-    actions: state.actions
-  }));
+  const tasks = useTimerStore((state) => state.tasks);
+  const { 
+    addTask, 
+    updateTask, 
+    startTimer, 
+    stopTimer: stopTimerAction,
+    reorderTasks,
+    removeTask,
+    setTasks,
+  } = useTimerStore();
 
   const [newTaskName, setNewTaskName] = useState('');
   const [taskDuration, setTaskDuration] = useState<number | ''>('');
@@ -19,10 +25,10 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
     if (!newTaskName || !taskDuration || taskDuration <= 0) return;
 
     if (editingTaskId) {
-      actions.updateTask(editingTaskId, { name: newTaskName, duration: taskDuration });
+      updateTask(editingTaskId, { name: newTaskName, duration: taskDuration });
       setEditingTaskId(null);
     } else {
-      actions.addTask({ name: newTaskName, duration: taskDuration });
+      addTask({ name: newTaskName, duration: taskDuration });
     }
 
     setNewTaskName('');
@@ -32,7 +38,7 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
 
   const startTimerFromIndex = (index: number) => {
     if (tasks.length === 0 || index >= tasks.length) return;
-    actions.startTimer(index);
+    startTimer(index);
     setView(true);
   };
 
@@ -76,7 +82,7 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
   };
   
   const stopTimer = () => {
-    actions.stopTimer();
+    stopTimerAction();
     setView(false);
   }
 
@@ -96,8 +102,8 @@ export function useTaskManager({ setView }: { setView: (compact: boolean) => voi
     handleTaskNameKeyDown,
     handleDurationKeyDown,
     stopTimer,
-    reorderTasks: actions.reorderTasks,
-    removeTask: actions.removeTask,
-    setTasks: actions.setTasks,
+    reorderTasks,
+    removeTask,
+    setTasks,
   };
 } 

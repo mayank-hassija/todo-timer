@@ -1,12 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { useTimerStore, type TimerState } from '../store/useTimerStore'
+import { useTimerStore } from '../store/useTimerStore'
 
 export function useTimer() {
-  const { isTimerRunning, isPaused, actions } = useTimerStore((state: TimerState) => ({
-    isTimerRunning: state.isTimerRunning,
-    isPaused: state.isPaused,
-    actions: state.actions
-  }))
+  const isTimerRunning = useTimerStore((state) => state.isTimerRunning)
+  const isPaused = useTimerStore((state) => state.isPaused)
+  const tick = useTimerStore((state) => state.tick)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -17,11 +15,11 @@ export function useTimer() {
     }
 
     timerRef.current = setInterval(() => {
-      actions.tick()
+      tick()
     }, 1000)
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [isTimerRunning, isPaused, actions])
+  }, [isTimerRunning, isPaused, tick])
 } 
