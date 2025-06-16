@@ -6,23 +6,21 @@ C:\Users\Name\Documents\todo-timer>npm run tauri dev
 
      Running BeforeDevCommand (`npm run dev`)
      Running DevCommand (`cargo  run --no-default-features --color always --`)
-        Info Watching C:\Users\Name\Documents\todo-timer\src-tauri for changes...
-    Updating crates.io index
-       Fetch [=====>                           ] 0 comp...
+
 > todo-timer@0.1.0 dev
 > vite
 
-error: failed to select a version for the requirement `tauri-build = "^2.5.1"`
-candidate versions found which didn't match: 2.2.0, 2.1.1, 2.1.0, ...
-location searched: crates.io index
-required by package `todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)`
-if you are looking for the prerelease package it needs to be specified explicitly
-    tauri-build = { version = "2.0.0-rc.13" }
+        Info Watching C:\Users\Name\Documents\todo-timer\src-tauri for changes...
 
-  VITE v4.5.14  ready in 1888 ms
+  VITE v4.5.14  ready in 2859 ms
 
   ➜  Local:   http://localhost:1420/
   ➜  Network: use --host to expose
+   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3m 57s
+     Running `target\debug\todo-timer.exe`
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? error: process didn't exit successfully: `target\debug\todo-timer.exe` (exit code: 0xc000013a, STATUS_CONTROL_C_EXIT)
+y
 
 C:\Users\Name\Documents\todo-timer>npm run tauri build
 
@@ -34,22 +32,19 @@ C:\Users\Name\Documents\todo-timer>npm run tauri build
 > todo-timer@0.1.0 build
 > tsc && vite build
 
-src/hooks/useWindowResize.ts:26:31 - error TS2345: Argument of type '{ width: number; height: number; }' is not assignable to parameter of type 'LogicalSize | PhysicalSize | Size'.
-  Type '{ width: number; height: number; }' is missing the following properties from type 'PhysicalSize': type, toLogical, toJSON, [SERIALIZE_TO_IPC_FN]
-
-26       await appWindow.setSize({
-                                 ~
-27         width: currentSize.width,
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-28         height: newHeight,
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~
-29       });
-   ~~~~~~~
-
-
-Found 1 error in src/hooks/useWindowResize.ts:26
-
-beforeBuildCommand `npm run build` failed with exit code 2
-       Error beforeBuildCommand `npm run build` failed with exit code 2
-
-C:\Users\Name\Documents\todo-timer>
+vite v4.5.14 building for production...
+✓ 1667 modules transformed.
+dist/index.html                   0.48 kB │ gzip:   0.31 kB
+dist/assets/index-38ea5071.css   24.53 kB │ gzip:   5.57 kB
+dist/assets/index-8941ca89.js   503.91 kB │ gzip: 116.34 kB
+✓ built in 8.28s
+   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
+    Finished `release` profile [optimized] target(s) in 4m 39s
+       Built application at: C:\Users\Name\Documents\todo-timer\src-tauri\target\release\todo-timer.exe
+        Info Target: x64
+     Running candle for "main.wxs"
+     Running light to produce C:\Users\Name\Documents\todo-timer\src-tauri\target\release\bundle\msi\Todo Timer_0.1.0_x64_en-US.msi
+        Warn NSIS directory contains mis-hashed files. Redownloading them.
+ Downloading https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.4.2/nsis_tauri_utils.dll
+failed to bundle project: `io: No such host is known. (os error 11001)`
+       Error failed to bundle project: `io: No such host is known. (os error 11001)`
