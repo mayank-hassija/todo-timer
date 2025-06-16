@@ -1,22 +1,3 @@
-Microsoft Windows [Version 10.0.26100.4061]
-(c) Microsoft Corporation. All rights reserved.
-
-C:\Users\Name\Documents\todo-timer>npm i
-
-up to date, audited 400 packages in 3s
-
-151 packages are looking for funding
-  run `npm fund` for details
-
-3 vulnerabilities (1 low, 2 moderate)
-
-To address issues that do not require attention, run:
-  npm audit fix
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
-
-Run `npm audit` for details.
 
 C:\Users\Name\Documents\todo-timer>npm run tauri dev
 
@@ -30,42 +11,18 @@ C:\Users\Name\Documents\todo-timer>npm run tauri dev
 > todo-timer@0.1.0 dev
 > vite
 
-
-  VITE v4.5.14  ready in 1514 ms
+   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
+    Building [=======================> ] 402/404: todo-...
+  VITE v4.5.14  ready in 1376 ms
 
   ➜  Local:   http://localhost:1420/
   ➜  Network: use --host to expose
-   Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
-error[E0599]: no method named `get_window` found for reference `&AppHandle<_>` in the current scope
-  --> src\main.rs:31:51
-   |
-31 |                         if let Some(window) = app.get_window("main") {
-   |                                                   ^^^^^^^^^^
-   |
-help: there is a method `get_webview_window` with a similar name
-   |
-31 |                         if let Some(window) = app.get_webview_window("main") {
-   |                                                        ++++++++
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3m 18s
+     Running `target\debug\todo-timer.exe`
 
-error[E0599]: no method named `on_tray_event` found for struct `TrayIconBuilder` in the current scope
-  --> src\main.rs:38:18
-   |
-24 |               let _tray = TrayIconBuilder::new()
-   |  _________________________-
-25 | |                 .menu(&menu)
-26 | |                 .on_menu_event(move |app, event| match event.id.as_ref() {
-27 | |                     "quit" => {
-...  |
-37 | |                 })
-38 | |                 .on_tray_event(|tray, event| {
-   | |_________________-^^^^^^^^^^^^^
-   |
-help: there is a method `on_tray_icon_event` with a similar name
-   |
-38 |                 .on_tray_icon_event(|tray, event| {
-   |                          +++++
+thread 'main' panicked at src\main.rs:51:10:
+error while running tauri application: PluginInitialization("store", "Error deserializing 'plugins.store' within your Tauri configuration: invalid type: map, expected unit")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: process didn't exit successfully: `target\debug\todo-timer.exe` (exit code: 101)
 
-For more information about this error, try `rustc --explain E0599`.
-error: could not compile `todo-timer` (bin "todo-timer") due to 2 previous errors
-
-
+C:\Users\Name\Documents\todo-timer>
