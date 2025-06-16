@@ -104,7 +104,6 @@ function App() {
         handleDurationKeyDown={handleDurationKeyDown}
         editingTaskId={editingTaskId}
         cancelEdit={cancelEdit}
-        addOrUpdateTask={addOrUpdateTask}
       />
       
       <div className="mt-4">
@@ -116,6 +115,11 @@ function App() {
           handleDragEnd={handleDragEnd}
           isTimerRunning={isTimerRunning}
           currentTaskIndex={currentTaskIndex ?? -1}
+          remainingTime={remainingTime}
+          isPaused={isPaused}
+          setIsPaused={(paused: boolean) => paused ? actions.pauseTimer() : actions.resumeTimer()}
+          handleSkipTask={actions.skipTask}
+          onSeek={handleSeek}
         />
       </div>
 
