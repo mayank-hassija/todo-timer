@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { useTimerStore } from '../store/useTimerStore'
-import shallow from 'zustand/shallow'
+import { useTimerStore, type TimerState } from '../store/useTimerStore'
+import { shallow } from 'zustand/shallow'
 
 export function useTimer() {
   const { isTimerRunning, isPaused, tick } = useTimerStore(
-    (state) => ({
+    (state: TimerState) => ({
       isTimerRunning: state.isTimerRunning,
       isPaused: state.isPaused,
       tick: state.tick,

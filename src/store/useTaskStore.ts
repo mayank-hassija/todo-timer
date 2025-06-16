@@ -27,7 +27,7 @@ const taskStateCreator: StateCreator<TaskState, [['zustand/immer', never]]> = (s
   },
   updateTask: (taskId, updates) => {
     set((state) => {
-      const task = state.tasks.find((t) => t.id === taskId);
+      const task = state.tasks.find((t: Task) => t.id === taskId);
       if (task) {
         Object.assign(task, updates);
       }
@@ -35,7 +35,7 @@ const taskStateCreator: StateCreator<TaskState, [['zustand/immer', never]]> = (s
   },
   removeTask: (taskId) => {
     set((state) => {
-      state.tasks = state.tasks.filter((t) => t.id !== taskId);
+      state.tasks = state.tasks.filter((t: Task) => t.id !== taskId);
     });
   },
   reorderTasks: (startIndex, endIndex) => {

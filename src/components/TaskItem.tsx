@@ -50,10 +50,6 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
     removeTask(task.id);
   };
 
-  const itemClasses = `relative flex items-center justify-between bg-gray-800 p-3 rounded-lg transition-shadow duration-200 ${
-    isCurrent && isTimerRunning ? 'ring-2 ring-green-500' : ''
-  } ${snapshot.isDragging ? 'shadow-lg scale-105 ring-2 ring-indigo-500' : 'shadow-md'}`;
-
   const renderTimerControls = () => (
     <>
       <button onClick={() => isPaused ? resumeTimer() : pauseTimer()} className="p-2 text-yellow-400 hover:text-yellow-300 transition-colors" title={isPaused ? "Resume" : "Pause"}>
@@ -81,28 +77,34 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
 
   return (
     <Draggable key={task.id} draggableId={task.id} index={index}>
-      {(provided: DraggableProvided, snapshot) => (
-        <li
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          className={itemClasses}
-        >
-          <div className="absolute top-0 left-0 bottom-0 bg-green-500/20 rounded-lg" style={{ width: `${progressPercentage}%` }}></div>
-          
-          <div {...provided.dragHandleProps} className="flex items-center justify-center pr-3 text-gray-500 cursor-grab active:cursor-grabbing">
-            <GripVertical size={20} />
-          </div>
+      {(provided: DraggableProvided, snapshot) => {
+        const itemClasses = `relative flex items-center justify-between bg-gray-800 p-3 rounded-lg transition-shadow duration-200 ${
+          isCurrent && isTimerRunning ? 'ring-2 ring-green-500' : ''
+        } ${snapshot.isDragging ? 'shadow-lg scale-105 ring-2 ring-indigo-500' : 'shadow-md'}`;
 
-          <div className="flex-1" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
-            <span className="font-semibold block truncate text-white">{task.name}</span>
-            <span className="text-gray-400 text-sm">{task.duration} min</span>
-          </div>
+        return (
+          <li
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            className={itemClasses}
+          >
+            <div className="absolute top-0 left-0 bottom-0 bg-green-500/20 rounded-lg" style={{ width: `${progressPercentage}%` }}></div>
+            
+            <div {...provided.dragHandleProps} className="flex items-center justify-center pr-3 text-gray-500 cursor-grab active:cursor-grabbing">
+              <GripVertical size={20} />
+            </div>
 
-          <div className="flex items-center gap-1 z-10">
-            {isCurrent && isTimerRunning ? renderTimerControls() : renderTaskActions()}
-          </div>
-        </li>
-      )}
+            <div className="flex-1" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
+              <span className="font-semibold block truncate text-white">{task.name}</span>
+              <span className="text-gray-400 text-sm">{task.duration} min</span>
+            </div>
+
+            <div className="flex items-center gap-1 z-10">
+              {isCurrent && isTimerRunning ? renderTimerControls() : renderTaskActions()}
+            </div>
+          </li>
+        );
+      }}
     </Draggable>
   );
 }; 

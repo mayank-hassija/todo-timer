@@ -86,12 +86,12 @@ const timerStateCreator: StateCreator<TimerState, [['zustand/immer', never]]> = 
     });
   },
   toggleRepeatMode: () => {
-    set((state) => {
+    set((state: TimerState) => {
       state.repeatMode = repeatModeCycle[state.repeatMode];
     });
   },
   setRemainingTime: (time) => {
-    set((state) => {
+    set((state: TimerState) => {
       state.remainingTime = time;
     });
   },
