@@ -11,8 +11,6 @@ interface TaskListProps {
   handleTaskClick: (taskId: string) => void;
   handleEditTask: (task: Task) => void;
   removeTask: (id: string) => void;
-  repeatLoop: boolean;
-  setRepeatLoop: (repeat: boolean) => void;
   remainingTime: number;
   isPaused: boolean;
   setIsPaused: (paused: boolean) => void;
@@ -28,8 +26,6 @@ export const TaskList: React.FC<TaskListProps> = ({
   handleTaskClick,
   handleEditTask,
   removeTask,
-  repeatLoop,
-  setRepeatLoop,
   remainingTime,
   isPaused,
   setIsPaused,

@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { invoke } from '@tauri-apps/api/tauri'
 import { appWindow, LogicalSize, currentMonitor } from '@tauri-apps/api/window'
 import { type DropResult } from '@hello-pangea/dnd'
-import { Task } from './types'
 import { TaskList } from './components/TaskList'
 import { TaskForm } from './components/TaskForm'
 import { TimerControls } from './components/TimerControls'
+import { useTimerStore } from './store/useTimerStore'
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60)
@@ -14,39 +13,26 @@ function formatTime(seconds: number): string {
 }
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([])
+  const { tasks, isTimerRunning, currentTaskIndex, remainingTime, isPaused, repeatMode, actions } = useTimerStore(state => ({
+    tasks: state.tasks,
+    isTimerRunning: state.isTimerRunning,
+    currentTaskIndex: state.currentTaskIndex,
+    remainingTime: state.remainingTime,
+    isPaused: state.isPaused,
+    repeatMode: state.repeatMode,
+    actions: state.actions
+  }));
+
   const [newTaskName, setNewTaskName] = useState('')
   const [taskDuration, setTaskDuration] = useState<number | ''>('')
-  const [repeatLoop, setRepeatLoop] = useState(false)
-  const [isTimerRunning, setIsTimerRunning] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0)
-  const [remainingTime, setRemainingTime] = useState(0)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
+  
   const [isCompactView, setIsCompactView] = useState(false);
   const [isScrollable, setIsScrollable] = useState(false)
   
   const taskNameInputRef = useRef<HTMLInputElement>(null)
   const durationInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks')
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks))
-    }
-  }, [])
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      localStorage.setItem('tasks', JSON.stringify(tasks))
-    }, 300); 
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [tasks]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -56,19 +42,13 @@ function App() {
     }
 
     timerRef.current = setInterval(() => {
-      setRemainingTime(prev => {
-        if (prev <= 1) {
-          handleTaskCompletion()
-          return 0
-        }
-        return prev - 1
-      })
+      actions.tick();
     }, 1000)
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [isTimerRunning, isPaused, tasks])
+  }, [isTimerRunning, isPaused, actions])
 
   useEffect(() => {
     const updateHeight = async () => {
@@ -103,48 +83,15 @@ function App() {
     }
     setIsCompactView(compact);
   }
-
-  const handleTaskCompletion = () => {
-    const audio = new Audio('/sound.mp3');
-    audio.play().catch(e => console.error("Error playing sound:", e));
-
-    const nextIndex = currentTaskIndex + 1
-    if (nextIndex < tasks.length) {
-      setCurrentTaskIndex(nextIndex)
-      setRemainingTime(tasks[nextIndex].duration * 60)
-    } else if (repeatLoop) {
-      setCurrentTaskIndex(0)
-      setRemainingTime(tasks[0].duration * 60)
-    } else {
-      setIsTimerRunning(false)
-      setView(false)
-    }
-  }
-
-  const handleSkipTask = () => {
-    if (!isTimerRunning) return;
-    handleTaskCompletion();
-  };
   
   const addOrUpdateTask = () => {
     if (!newTaskName || !taskDuration || taskDuration <= 0) return;
 
     if (editingTaskId) {
-      // Update existing task
-      setTasks(prevTasks =>
-        prevTasks.map(task =>
-          task.id === editingTaskId ? { ...task, name: newTaskName, duration: taskDuration } : task
-        )
-      );
+      actions.updateTask(editingTaskId, { name: newTaskName, duration: taskDuration });
       setEditingTaskId(null);
     } else {
-      // Add new task
-      const newTask: Task = {
-        id: Date.now().toString(),
-        name: newTaskName,
-        duration: taskDuration,
-      };
-      setTasks(prevTasks => [...prevTasks, newTask]);
+      actions.addTask({ name: newTaskName, duration: taskDuration });
     }
 
     setNewTaskName('');
@@ -152,21 +99,9 @@ function App() {
     taskNameInputRef.current?.focus();
   };
 
-  const removeTask = (id: string) => {
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== id))
-  }
-
   const startTimerFromIndex = (index: number) => {
     if (tasks.length === 0 || index >= tasks.length) return
-
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    setIsTimerRunning(true)
-    setIsPaused(false)
-    setCurrentTaskIndex(index)
-    setRemainingTime(tasks[index].duration * 60)
+    actions.startTimer(index);
     setView(true)
   }
 
@@ -178,7 +113,7 @@ function App() {
     }
   }
 
-  const handleEditTask = (task: Task) => {
+  const handleEditTask = (task) => {
     setEditingTaskId(task.id);
     setNewTaskName(task.name);
     setTaskDuration(task.duration);
@@ -209,58 +144,45 @@ function App() {
     }
   }
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const handleDeleteAllTasks = () => {
-    setTasks([])
+    actions.setTasks([])
     setShowDeleteConfirm(false)
-    setIsTimerRunning(false)
-    setRemainingTime(0)
-    setCurrentTaskIndex(0)
+    actions.stopTimer();
   }
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return
     }
-
-    const { source, destination } = result;
-
-    setTasks(prevTasks => {
-      const newTasks = Array.from(prevTasks);
-      const [reorderedItem] = newTasks.splice(source.index, 1);
-      newTasks.splice(destination.index, 0, reorderedItem);
-      return newTasks;
-    });
+    actions.reorderTasks(result.source.index, result.destination.index);
   }
 
   const stopTimer = () => {
-    setIsTimerRunning(false);
-    setIsPaused(false);
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
+    actions.stopTimer();
     setView(false);
   }
 
   const handleSeek = (newTime: number) => {
     if (isTimerRunning) {
-      setRemainingTime(newTime);
+      actions.setRemainingTime(newTime);
     }
   };
 
-  if (isTimerRunning && tasks.length > 0) {
+  if (isTimerRunning && tasks.length > 0 && currentTaskIndex !== null) {
     const currentTask = tasks[currentTaskIndex];
     return (
       <div className="flex flex-col h-screen bg-gray-900 text-white overflow-y-hidden">
         <TimerControls
           isPaused={isPaused}
-          setIsPaused={setIsPaused}
-          handleSkipTask={handleSkipTask}
+          setIsPaused={(paused) => paused ? actions.pauseTimer() : actions.resumeTimer()}
+          handleSkipTask={actions.skipTask}
           stopTimer={stopTimer}
           remainingTime={remainingTime}
           formatTime={formatTime}
           taskName={currentTask?.name}
-          repeatLoop={repeatLoop}
-          setRepeatLoop={setRepeatLoop}
+          repeatMode={repeatMode}
+          toggleRepeatMode={actions.toggleRepeatMode}
           totalDuration={currentTask?.duration * 60}
           onSeek={handleSeek}
         />
@@ -287,20 +209,28 @@ function App() {
         <TaskList
           tasks={tasks}
           handleEditTask={handleEditTask}
-          removeTask={removeTask}
+          removeTask={actions.removeTask}
           handleTaskClick={handleTaskClick}
           handleDragEnd={handleDragEnd}
           isTimerRunning={isTimerRunning}
-          currentTaskIndex={currentTaskIndex}
-          repeatLoop={repeatLoop}
-          setRepeatLoop={setRepeatLoop}
+          currentTaskIndex={currentTaskIndex ?? -1}
           remainingTime={remainingTime}
           isPaused={isPaused}
-          setIsPaused={setIsPaused}
-          handleSkipTask={handleSkipTask}
+          setIsPaused={(paused) => paused ? actions.pauseTimer() : actions.resumeTimer()}
+          handleSkipTask={actions.skipTask}
           onSeek={handleSeek}
         />
       </div>
+
+      <div className="flex justify-end mt-4">
+        <button
+            onClick={() => setShowDeleteConfirm(true)}
+            className="text-gray-400 hover:text-red-400 text-xs transition-colors"
+        >
+            Delete all tasks
+        </button>
+      </div>
+
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

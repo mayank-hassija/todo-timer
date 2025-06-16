@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Task } from '../types';
+import { Task, RepeatMode } from '../types';
 
 interface TimerState {
   tasks: Task[];
@@ -8,7 +8,7 @@ interface TimerState {
   isTimerRunning: boolean;
   isPaused: boolean;
   remainingTime: number;
-  repeatLoop: boolean;
+  repeatMode: RepeatMode;
   actions: {
     setTasks: (tasks: Task[]) => void;
     addTask: (task: Omit<Task, 'id'>) => void;
@@ -21,7 +21,8 @@ interface TimerState {
     stopTimer: () => void;
     skipTask: () => void;
     tick: () => void;
-    setRepeatLoop: (repeat: boolean) => void;
+    toggleRepeatMode: () => void;
+    setRemainingTime: (time: number) => void;
   };
 }
 
@@ -33,7 +34,7 @@ export const useTimerStore = create<TimerState>()(
       isTimerRunning: false,
       isPaused: false,
       remainingTime: 0,
-      repeatLoop: false,
+      repeatMode: 'off',
       actions: {
         setTasks: (tasks) => set({ tasks }),
         addTask: (task) =>
@@ -42,13 +43,13 @@ export const useTimerStore = create<TimerState>()(
           })),
         updateTask: (taskId, updates) =>
           set((state) => ({
-            tasks: state.tasks.map((task) =>
-              task.id === taskId ? { ...task, ...updates } : task
+            tasks: state.tasks.map((t) =>
+              t.id === taskId ? { ...t, ...updates } : t
             ),
           })),
         removeTask: (taskId) =>
           set((state) => ({
-            tasks: state.tasks.filter((task) => task.id !== taskId),
+            tasks: state.tasks.filter((t) => t.id !== taskId),
           })),
         reorderTasks: (startIndex, endIndex) =>
           set((state) => {
@@ -78,14 +79,22 @@ export const useTimerStore = create<TimerState>()(
             remainingTime: 0,
           }),
         skipTask: () => {
-            const { tasks, currentTaskIndex, repeatLoop, actions } = get();
+            const { tasks, currentTaskIndex, repeatMode, actions } = get();
             if (currentTaskIndex === null) return;
+            
+            const audio = new Audio('/sound.mp3');
+            audio.play().catch(e => console.error("Error playing sound:", e));
+            
+            if (repeatMode === 'current') {
+              actions.startTimer(currentTaskIndex);
+              return;
+            }
     
             const nextIndex = currentTaskIndex + 1;
     
             if (nextIndex < tasks.length) {
               actions.startTimer(nextIndex);
-            } else if (repeatLoop) {
+            } else if (repeatMode === 'all') {
               actions.startTimer(0);
             } else {
               actions.stopTimer();
@@ -100,14 +109,18 @@ export const useTimerStore = create<TimerState>()(
                 return { remainingTime: 0 };
             });
         },
-        setRepeatLoop: (repeat) => set({ repeatLoop: repeat }),
+        toggleRepeatMode: () => set((state) => {
+          const nextMode: RepeatMode = state.repeatMode === 'off' ? 'current' : state.repeatMode === 'current' ? 'all' : 'off';
+          return { repeatMode: nextMode };
+        }),
+        setRemainingTime: (time) => set({ remainingTime: time }),
       },
     }),
     {
       name: 'todo-timer-storage',
       partialize: (state) => ({
         tasks: state.tasks,
-        repeatLoop: state.repeatLoop,
+        repeatMode: state.repeatMode,
       }),
     }
   )

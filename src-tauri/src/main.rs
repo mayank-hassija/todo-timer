@@ -43,30 +43,8 @@ fn main() {
             _ => {} // Handle any other system tray events
         })
         .invoke_handler(tauri::generate_handler![
-            task_completed,
-            loop_completed,
             set_window_shadow,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-}
-
-#[tauri::command]
-async fn task_completed(app: tauri::AppHandle) -> Result<(), String> {
-    Notification::new(&app.config().tauri.bundle.identifier)
-        .title("Task Completed")
-        .body("The current task has been completed.")
-        .show()
-        .ok();
-    Ok(())
-}
-
-#[tauri::command]
-async fn loop_completed(app: tauri::AppHandle) -> Result<(), String> {
-    Notification::new(&app.config().tauri.bundle.identifier)
-        .title("Loop Completed")
-        .body("All tasks in the loop are done!")
-        .show()
-        .ok();
-    Ok(())
 }

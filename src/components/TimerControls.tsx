@@ -1,5 +1,6 @@
 import React from 'react';
-import { Play, Pause, SkipForward, Repeat, Square } from 'lucide-react';
+import { Play, Pause, SkipForward, Repeat, Square, Repeat1 } from 'lucide-react';
+import { RepeatMode } from '../types';
 
 interface TimerControlsProps {
   isPaused: boolean;
@@ -9,8 +10,8 @@ interface TimerControlsProps {
   remainingTime: number;
   formatTime: (seconds: number) => string;
   taskName: string;
-  repeatLoop: boolean;
-  setRepeatLoop: (repeat: boolean) => void;
+  repeatMode: RepeatMode;
+  toggleRepeatMode: () => void;
   totalDuration: number;
   onSeek: (newTime: number) => void;
 }
@@ -23,8 +24,8 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   remainingTime,
   formatTime,
   taskName,
-  repeatLoop,
-  setRepeatLoop,
+  repeatMode,
+  toggleRepeatMode,
   totalDuration,
   onSeek,
 }) => {
@@ -46,6 +47,31 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
     onSeek(newRemainingTime);
   };
 
+  const getRepeatProps = () => {
+    switch (repeatMode) {
+      case 'current':
+        return {
+          Icon: Repeat1,
+          title: 'Repeat Current Task',
+          className: 'text-green-400 hover:bg-green-400/10'
+        };
+      case 'all':
+        return {
+          Icon: Repeat,
+          title: 'Repeat All Tasks',
+          className: 'text-green-400 hover:bg-green-400/10'
+        };
+      default:
+        return {
+          Icon: Repeat,
+          title: 'Enable Repeat',
+          className: 'text-gray-400 hover:text-white hover:bg-gray-700'
+        };
+    }
+  };
+
+  const { Icon: RepeatIcon, title: repeatTitle, className: repeatClassName } = getRepeatProps();
+
   return (
     <div className="flex flex-col justify-around h-full p-4 bg-gray-900 text-white">
       <div className="flex justify-between items-center w-full">
@@ -54,13 +80,11 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
         </h2>
         <div className="flex items-center gap-x-2">
           <button
-            onClick={() => setRepeatLoop(!repeatLoop)}
-            className={`p-1 transition-colors rounded-full ${
-              repeatLoop ? 'text-green-400 hover:bg-green-400/10' : 'text-gray-400 hover:text-white hover:bg-gray-700'
-            }`}
-            title={repeatLoop ? "Disable Repeat" : "Enable Repeat"}
+            onClick={toggleRepeatMode}
+            className={`p-1 transition-colors rounded-full ${repeatClassName}`}
+            title={repeatTitle}
           >
-            <Repeat size={18} />
+            <RepeatIcon size={18} />
           </button>
           <button
             onClick={handleSkipTask}
