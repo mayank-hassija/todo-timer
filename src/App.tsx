@@ -25,11 +25,16 @@ function App() {
 
   if (isTimerRunning && tasks.length > 0 && currentTaskIndex !== null) {
     const currentTask = tasks[currentTaskIndex];
+
+    if (!currentTask) {
+      return null;
+    }
+
     return (
       <div className="flex flex-col h-screen bg-slate-900 text-slate-100 overflow-y-hidden">
         <TimerControls
-          taskName={currentTask?.name}
-          totalDuration={currentTask?.duration * 60}
+          taskName={currentTask.name}
+          totalDuration={currentTask.duration * 60}
         />
       </div>
     );

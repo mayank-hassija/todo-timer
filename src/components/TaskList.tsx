@@ -4,6 +4,7 @@ import { Edit, Trash2, GripVertical, Play, Pause, SkipForward } from 'lucide-rea
 import { useTaskStore } from '../store/useTaskStore';
 import { useTimerStore } from '../store/useTimerStore';
 import { useTaskManager } from '../hooks/useTaskManager';
+import { calculateNewTime } from '../utils';
 
 interface TaskListProps {
   handleDragEnd: (result: DropResult) => void;
@@ -20,23 +21,16 @@ export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
     resumeTimer, 
     skipTask, 
     setRemainingTime,
-    startTimer
+    startTimer,
+    stopTimer,
   } = useTimerStore();
   const { handleEditTask, handleTaskClick } = useTaskManager();
 
   const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>, totalDuration: number) => {
-    if (totalDuration === 0) return;
-
-    const progressBar = e.currentTarget;
-    const rect = progressBar.getBoundingClientRect();
-    const clickPositionX = e.clientX - rect.left;
-    const progressBarWidth = progressBar.offsetWidth;
-    const clickPercentage = Math.max(0, Math.min(1, clickPositionX / progressBarWidth));
-    
-    const newElapsedTime = Math.floor(totalDuration * clickPercentage);
-    const newRemainingTime = totalDuration - newElapsedTime;
-    
-    setRemainingTime(newRemainingTime);
+    const newRemainingTime = calculateNewTime(e, totalDuration);
+    if (newRemainingTime !== null) {
+      setRemainingTime(newRemainingTime);
+    }
   };
 
   if (tasks.length === 0) {
@@ -109,6 +103,12 @@ export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
+                              const taskIndex = tasks.findIndex(
+                                (t) => t.id === task.id
+                              );
+                              if (isTimerRunning && taskIndex === currentTaskIndex) {
+                                stopTimer();
+                              }
                               removeTask(task.id);
                             }}
                             className="p-2 text-slate-400 hover:text-rose-500 transition-colors rounded-full opacity-0 group-hover:opacity-100"
@@ -116,7 +116,7 @@ export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
                           >
                             <Trash2 size={18} />
                           </button>
-                           <button
+                          <button
                             onClick={() => startTimer(index)}
                             className="px-3 py-1.5 bg-green-600 text-white rounded-full text-xs font-semibold hover:bg-green-500 transition-colors shadow-sm ml-2"
                             title="Start Timer"

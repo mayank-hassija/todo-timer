@@ -112,7 +112,7 @@ export const TaskForm: React.FC = () => {
           }`}
           aria-label={editingTaskId ? 'Update Task' : 'Add Task'}
         >
-          {editingTaskId ? 'Update' : <Plus size={20} />}
+          {editingTaskId ? 'Update' : 'Add'}
         </button>
         {editingTaskId && (
           <button

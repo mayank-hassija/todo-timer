@@ -1,7 +1,7 @@
 import React from 'react';
 import { Play, Pause, SkipForward, Repeat, Square, Repeat1 } from 'lucide-react';
 import { useTimerStore } from '../store/useTimerStore';
-import { formatTime } from '../utils';
+import { formatTime, calculateNewTime } from '../utils';
 
 interface TimerControlsProps {
   taskName: string;
@@ -25,18 +25,10 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
   const progressPercentage = totalDuration > 0 ? (elapsedTime / totalDuration) * 100 : 0;
 
   const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (totalDuration === 0) return;
-
-    const progressBar = e.currentTarget;
-    const rect = progressBar.getBoundingClientRect();
-    const clickPositionX = e.clientX - rect.left;
-    const progressBarWidth = progressBar.offsetWidth;
-    const clickPercentage = Math.max(0, Math.min(1, clickPositionX / progressBarWidth));
-    
-    const newElapsedTime = Math.floor(totalDuration * clickPercentage);
-    const newRemainingTime = totalDuration - newElapsedTime;
-    
-    setRemainingTime(newRemainingTime);
+    const newRemainingTime = calculateNewTime(e, totalDuration);
+    if (newRemainingTime !== null) {
+      setRemainingTime(newRemainingTime);
+    }
   };
 
   const getRepeatProps = () => {
