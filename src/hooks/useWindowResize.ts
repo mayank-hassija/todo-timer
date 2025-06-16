@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
-import { appWindow } from '@tauri-apps/api/webviewWindow';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 const BASE_HEIGHT = 160; // Base height for the window (padding, form)
 const TASK_HEIGHT = 56; // h-14 -> 3.5rem -> 56px
@@ -21,6 +21,7 @@ export const useWindowResize = () => {
         newHeight = BASE_HEIGHT + (visibleTasks * TASK_HEIGHT);
       }
       
+      const appWindow = getCurrentWindow();
       const currentSize = await appWindow.innerSize();
       await appWindow.setSize({
         width: currentSize.width,
