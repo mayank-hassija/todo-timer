@@ -6,12 +6,14 @@ import { TimerControls } from './components/TimerControls'
 import { useTimerStore } from './store/useTimerStore'
 import { useTaskStore } from './store/useTaskStore'
 import { useTimer } from './hooks/useTimer'
+import { useWindowResize } from './hooks/useWindowResize'
 
 function App() {
   const { isTimerRunning, currentTaskIndex } = useTimerStore();
   const { tasks, reorderTasks } = useTaskStore();
 
   useTimer();
+  useWindowResize();
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -37,7 +39,7 @@ function App() {
       <div className="w-full max-w-2xl mx-auto">
         <TaskForm />
         
-        <div className="mt-4 flex-grow overflow-y-auto">
+        <div className="mt-4 overflow-y-auto" style={{ maxHeight: 'calc(5 * 56px)' }}>
           <TaskList
             handleDragEnd={handleDragEnd}
           />
