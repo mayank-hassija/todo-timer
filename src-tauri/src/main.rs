@@ -8,13 +8,19 @@ use tauri::{
     tray::{TrayIconBuilder, TrayIconEvent},
     Manager,
 };
+use tauri_plugin_notification;
 use tauri_plugin_shell;
 use tauri_plugin_store::Builder;
 
 fn main() {
     tauri::Builder::default()
-        .plugin(Builder::default().build())
+        .plugin(
+            Builder::default()
+                .path("data/store.bin".into())
+                .build(),
+        )
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_notification::init())
         .setup(|app| {
             let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let show = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;

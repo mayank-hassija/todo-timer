@@ -43,9 +43,6 @@
     ]
   },
   "plugins": {
-    "store": {
-      "path": "data/store.bin"
-    },
     "notification": {
       "icon": "icons/icon.png"
     },
