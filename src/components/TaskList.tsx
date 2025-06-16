@@ -7,10 +7,9 @@ import { useTaskManager } from '../hooks/useTaskManager';
 
 interface TaskListProps {
   handleDragEnd: (result: DropResult) => void;
-  onDeleteAllClick: () => void;
 }
 
-export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd, onDeleteAllClick }) => {
+export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
   const { tasks, removeTask } = useTaskStore();
   const { 
     isTimerRunning, 
@@ -139,15 +138,6 @@ export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd, onDeleteAllCl
               )}
             </Droppable>
           </DragDropContext>
-          <div className="mt-4 text-center">
-            <button
-              onClick={onDeleteAllClick}
-              className="text-gray-400 hover:text-white text-sm"
-              disabled={tasks.length === 0}
-            >
-              Delete all tasks
-            </button>
-          </div>
         </>
       )}
     </div>

@@ -91,6 +91,5 @@ export function useTaskManager() {
     stopTimer: stopTimerAction,
     reorderTasks,
     removeTask,
-    setTasks,
   };
 } 

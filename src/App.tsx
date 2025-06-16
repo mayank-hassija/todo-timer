@@ -6,34 +6,18 @@ import { TimerControls } from './components/TimerControls'
 import { useTimerStore } from './store/useTimerStore'
 import { useTaskStore } from './store/useTaskStore'
 import { useTimer } from './hooks/useTimer'
-import { DeleteConfirmationDialog } from './components/DeleteConfirmationDialog'
 
 function App() {
   const { isTimerRunning, currentTaskIndex } = useTimerStore();
-  const { tasks, setTasks, reorderTasks } = useTaskStore();
-  const { stopTimer } = useTimerStore();
-
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { tasks, reorderTasks } = useTaskStore();
 
   useTimer();
-
-  const handleDeleteAllTasks = () => {
-    setTasks([]);
-    setShowDeleteConfirm(false);
-    stopTimer();
-  };
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
     reorderTasks(result.source.index, result.destination.index);
-  };
-
-  const openDeleteConfirmation = () => {
-    if (tasks.length > 0) {
-      setShowDeleteConfirm(true);
-    }
   };
 
   if (isTimerRunning && tasks.length > 0 && currentTaskIndex !== null) {
@@ -52,19 +36,11 @@ function App() {
     <div className="flex flex-col h-screen bg-gray-900 text-white p-4">
       <TaskForm />
       
-      <div className="mt-4 flex-grow min-h-5-tasks overflow-y-auto">
+      <div className="mt-4 flex-grow overflow-y-auto">
         <TaskList
           handleDragEnd={handleDragEnd}
-          onDeleteAllClick={openDeleteConfirmation}
         />
       </div>
-
-      {showDeleteConfirm && (
-        <DeleteConfirmationDialog
-          onConfirm={handleDeleteAllTasks}
-          onCancel={() => setShowDeleteConfirm(false)}
-        />
-      )}
     </div>
   );
 }
