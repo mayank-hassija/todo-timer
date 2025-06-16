@@ -1,24 +1,22 @@
+Microsoft Windows [Version 10.0.26100.4061]
+(c) Microsoft Corporation. All rights reserved.
 
-C:\Users\Name\Documents\todo-timer>npm run tauri build
+C:\Users\Name\Documents\todo-timer>npm i
 
-> todo-timer@0.1.0 tauri
-> tauri build
+up to date, audited 400 packages in 21s
 
-     Running beforeBuildCommand `npm run build`
+151 packages are looking for funding
+  run `npm fund` for details
 
-> todo-timer@0.1.0 build
-> tsc && vite build
+3 vulnerabilities (1 low, 2 moderate)
 
-src/hooks/useWindowResize.ts:3:10 - error TS2305: Module '"@tauri-apps/api/window"' has no exported member 'getCurrent'.
+To address issues that do not require attention, run:
+  npm audit fix
 
-3 import { getCurrent } from '@tauri-apps/api/window';
-           ~~~~~~~~~~
+To address all issues (including breaking changes), run:
+  npm audit fix --force
 
-
-Found 1 error in src/hooks/useWindowResize.ts:3
-
-beforeBuildCommand `npm run build` failed with exit code 2
-       Error beforeBuildCommand `npm run build` failed with exit code 2
+Run `npm audit` for details.
 
 C:\Users\Name\Documents\todo-timer>npm run tauri dev
 
@@ -33,14 +31,37 @@ C:\Users\Name\Documents\todo-timer>npm run tauri dev
 > vite
 
 
-  VITE v4.5.14  ready in 27321 ms
+  VITE v4.5.14  ready in 925 ms
 
   ➜  Local:   http://localhost:1420/
   ➜  Network: use --host to expose
    Compiling todo-timer v0.1.0 (C:\Users\Name\Documents\todo-timer\src-tauri)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 49s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 57s
      Running `target\debug\todo-timer.exe`
-Terminate batch job (Y/N)? Terminate batch job (Y/N)? [0617/022228.407:ERROR:ui\gfx\win\window_impl.cc:124] Failed to unregister class Chrome_WidgetWin_0. Error = 1411
-error: process didn't exit successfully: `target\debug\todo-timer.exe` (exit code: 0xc000013a, STATUS_CONTROL_C_EXIT)
+[0617/022850.082:ERROR:ui\gfx\win\window_impl.cc:124] Failed to unregister class Chrome_WidgetWin_0. Error = 1411
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? error: process didn't exit successfully: `target\debug\todo-timer.exe` (exit code: 0xc000013a, STATUS_CONTROL_C_EXIT)
 
 Terminate batch job (Y/N)? y
+
+C:\Users\Name\Documents\todo-timer>npm run tauri build
+
+> todo-timer@0.1.0 tauri
+> tauri build
+
+     Running beforeBuildCommand `npm run build`
+
+> todo-timer@0.1.0 build
+> tsc && vite build
+
+src/hooks/useWindowResize.ts:3:10 - error TS2305: Module '"@tauri-apps/api/webviewWindow"' has no exported member 'appWindow'.
+
+3 import { appWindow } from '@tauri-apps/api/webviewWindow';
+           ~~~~~~~~~
+
+
+Found 1 error in src/hooks/useWindowResize.ts:3
+
+beforeBuildCommand `npm run build` failed with exit code 2
+       Error beforeBuildCommand `npm run build` failed with exit code 2
+
+C:\Users\Name\Documents\todo-timer>
