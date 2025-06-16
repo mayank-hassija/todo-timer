@@ -43,22 +43,13 @@ function App() {
   }
 
   return (
-    <div className={`flex flex-col h-screen bg-gray-900 text-white p-4`}>
+    <div className="flex flex-col h-screen bg-gray-900 text-white p-4">
       <TaskForm />
       
-      <div className="mt-4">
+      <div className="mt-4 flex-grow min-h-5-tasks overflow-y-auto">
         <TaskList
           handleDragEnd={handleDragEnd}
         />
-      </div>
-
-      <div className="flex justify-end mt-4">
-        <button
-            onClick={() => setShowDeleteConfirm(true)}
-            className="text-gray-400 hover:text-red-400 text-xs transition-colors"
-        >
-            Delete all tasks
-        </button>
       </div>
 
       {showDeleteConfirm && (

@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin')
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -23,7 +25,26 @@ export default {
       fontFamily: {
         'sans': ['Segoe UI', 'system-ui', '-apple-system', 'sans-serif'],
       },
+      minHeight: {
+        '5-tasks': '20rem', // Assuming each task item is roughly 4rem high
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        '.no-arrows': {
+          '-moz-appearance': 'textfield',
+          '&::-webkit-inner-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: '0'
+          },
+          '&::-webkit-outer-spin-button': {
+            '-webkit-appearance': 'none',
+            margin: '0'
+          }
+        }
+      })
+    })
+  ],
 } 

@@ -90,6 +90,11 @@ export const TaskForm: React.FC = () => {
         />
         {durationError && <p className="text-red-500 text-xs mt-1">{durationError}</p>}
       </div>
+      {editingTaskId && (
+        <button onClick={addOrUpdateTask} className="px-3 py-1 bg-green-500 text-white rounded">
+          Update
+        </button>
+      )}
     </div>
   );
 }; 
