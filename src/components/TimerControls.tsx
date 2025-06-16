@@ -139,7 +139,6 @@ export const TimerControls: React.FC<TimerControlsProps> = ({ taskName, totalDur
           >
             <SkipForward size={24} />
           </button>
-          <div className="w-12 h-12"></div>
         </div>
       </div>
     </div>

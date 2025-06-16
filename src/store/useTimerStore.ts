@@ -69,13 +69,11 @@ const timerStateCreator: StateCreator<TimerState> = (set, get) => ({
     }
   },
   tick: () => {
-    set((state) => {
-      if (state.remainingTime > 1) {
-        return { remainingTime: state.remainingTime - 1 };
-      }
+    if (get().remainingTime > 1) {
+      set((state) => ({ remainingTime: state.remainingTime - 1 }));
+    } else {
       get().skipTask();
-      return { remainingTime: 0 };
-    });
+    }
   },
   toggleRepeatMode: () => set((state) => {
     const nextMode: RepeatMode = state.repeatMode === 'off' ? 'current' : state.repeatMode === 'current' ? 'all' : 'off';
