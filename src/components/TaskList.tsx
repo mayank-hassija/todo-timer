@@ -12,10 +12,8 @@ export const TaskList: React.FC<TaskListProps> = ({ handleDragEnd }) => {
 
   if (tasks.length === 0) {
     return (
-      <div className="text-center py-16 text-slate-500 flex flex-col items-center gap-4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-        <p className="text-lg font-medium">You have no tasks.</p>
-        <p className="text-sm">Add a task above to get started!</p>
+      <div className="text-center py-16 text-slate-500">
+        <p className="text-lg">No tasks yet. Add one to begin.</p>
       </div>
     );
   }

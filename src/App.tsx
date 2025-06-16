@@ -5,7 +5,6 @@ import { useTimerStore } from './store/useTimerStore'
 import { useTaskStore } from './store/useTaskStore'
 import { useTimer } from './hooks/useTimer'
 import { useWindowResize } from './hooks/useWindowResize'
-import { Header } from './components/Header';
 import { TimerView } from './components/TimerView';
 
 function App() {
@@ -27,14 +26,10 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-slate-100 container mx-auto sm:px-4">
-      <Header />
-      <main className="w-full max-w-2xl mx-auto flex-grow flex flex-col pt-2 pb-8 transition-opacity duration-300">
-        <div className="bg-slate-800/50 p-6 rounded-2xl shadow-lg backdrop-blur-sm border border-slate-700/50">
-          <TaskForm />
-        </div>
-        
-        <div className="mt-6 flex-grow overflow-y-auto pr-2">
+    <div className="flex flex-col h-screen bg-gray-900 text-white container mx-auto sm:px-4">
+      <main className="w-full max-w-lg mx-auto flex-grow flex flex-col pt-12 pb-8">
+        <TaskForm />
+        <div className="mt-8 flex-grow overflow-y-auto pr-2">
           <TaskList handleDragEnd={handleDragEnd} />
         </div>
       </main>

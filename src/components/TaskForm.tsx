@@ -65,7 +65,6 @@ export const TaskForm: React.FC = () => {
     addOrUpdateTask();
   };
 
-  const formBorderClasses = editingTaskId ? 'p-4 border border-indigo-500 rounded-lg' : '';
   const submitButtonClasses = `px-4 py-3 rounded-md transition-all duration-200 ease-in-out flex items-center gap-2 font-semibold ${
     editingTaskId
       ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
@@ -74,7 +73,7 @@ export const TaskForm: React.FC = () => {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="relative">
-      <div className={`flex gap-3 transition-all duration-300 ${formBorderClasses}`}>
+      <div className="flex gap-3 items-start">
         <div className="flex-grow">
           <label htmlFor="taskName" className="sr-only">Task Name</label>
           <input
@@ -85,39 +84,36 @@ export const TaskForm: React.FC = () => {
             onChange={(e) => setNewTaskName(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, durationInputRef.current)}
             placeholder="What needs to be done?"
-            className="w-full p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-slate-100 placeholder-slate-400 text-base"
+            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-gray-400 text-base"
           />
         </div>
-        <div>
+        <div className="flex-shrink-0">
           <label htmlFor="taskDuration" className="sr-only">Duration (minutes)</label>
-          <div className="relative">
-            <input
-              id="taskDuration"
-              ref={durationInputRef}
-              type="number"
-              value={taskDuration}
-              onChange={handleDurationChange}
-              onKeyDown={(e) => handleKeyDown(e)}
-              placeholder="Mins"
-              className={`w-32 p-3 bg-slate-700/50 rounded-md focus:ring-2 focus:outline-none text-slate-100 placeholder-slate-400 no-arrows text-base ${durationError ? 'ring-2 ring-red-500' : 'focus:ring-indigo-500'}`}
-              min="1"
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">min</span>
-          </div>
-          {durationError && <p className="text-red-500 text-xs mt-1">{durationError}</p>}
+          <input
+            id="taskDuration"
+            ref={durationInputRef}
+            type="number"
+            value={taskDuration}
+            onChange={handleDurationChange}
+            onKeyDown={(e) => handleKeyDown(e)}
+            placeholder="Mins"
+            className={`w-28 p-3 bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:outline-none text-white placeholder-gray-400 no-arrows text-base ${durationError ? 'ring-2 ring-red-500' : 'focus:ring-indigo-500'}`}
+            min="1"
+          />
+          {durationError && <p className="text-red-500 text-xs mt-1 absolute">{durationError}</p>}
         </div>
         <button
           type="submit"
-          className={submitButtonClasses}
+          className="px-4 py-3 rounded-md transition-colors flex items-center gap-2 font-semibold bg-indigo-600 hover:bg-indigo-500 text-white"
           aria-label={editingTaskId ? 'Update Task' : 'Add Task'}
         >
-          {editingTaskId ? 'Update' : <><Plus size={18} className="-ml-1" /><span>Add</span></>}
+          {editingTaskId ? 'Update' : <><Plus size={18} /><span>Add</span></>}
         </button>
         {editingTaskId && (
           <button
             type="button"
             onClick={cancelEdit}
-            className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 backdrop-blur-sm rounded-full absolute -top-3 -right-3"
+            className="p-3 rounded-md text-gray-400 hover:text-white bg-gray-700 hover:bg-gray-600 transition-colors"
             title="Cancel Edit"
           >
             <X size={20} />

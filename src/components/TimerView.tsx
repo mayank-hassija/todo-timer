@@ -17,7 +17,7 @@ export const TimerView = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-slate-100 overflow-y-hidden animate-in fade-in duration-500">
+    <div className="flex flex-col h-screen bg-gray-900 text-white overflow-y-hidden animate-in fade-in duration-500">
       <TimerControls
         taskName={currentTask.name}
         totalDuration={currentTask.duration * 60}
