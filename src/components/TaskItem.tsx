@@ -10,9 +10,10 @@ import { calculateNewTime } from '../utils';
 interface TaskItemProps {
   task: Task;
   index: number;
+  taskManager: ReturnType<typeof useTaskManager>;
 }
 
-export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ task, index, taskManager }) => {
   const { removeTask } = useTaskStore();
   const {
     isTimerRunning,
@@ -26,9 +27,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
     startTimer,
     stopTimer,
   } = useTimerStore();
-  const { handleEditTask, handleTaskClick } = useTaskManager();
+  const { handleEditTask, handleTaskClick } = taskManager;
 
-  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>, totalDuration: number) => {
+  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const newRemainingTime = calculateNewTime(e, totalDuration);
     if (newRemainingTime !== null) {
       setRemainingTime(newRemainingTime);
@@ -69,9 +70,6 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
       <button onClick={handleDelete} className="p-2 text-gray-400 hover:text-rose-500 transition-colors" title="Delete Task">
         <Trash2 size={18} />
       </button>
-      <button onClick={() => startTimer(index)} className="p-2 text-green-500 hover:text-green-400 transition-colors" title="Start Timer">
-        <Play size={20} />
-      </button>
     </>
   );
 
@@ -88,13 +86,17 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, index }) => {
             {...provided.draggableProps}
             className={itemClasses}
           >
-            <div className="absolute top-0 left-0 bottom-0 bg-green-500/20 rounded-lg" style={{ width: `${progressPercentage}%` }}></div>
+            <div 
+              className="absolute top-0 left-0 bottom-0 bg-green-500/20 rounded-lg cursor-pointer" 
+              style={{ width: `${progressPercentage}%` }}
+              onClick={handleProgressBarClick}
+            ></div>
             
             <div {...provided.dragHandleProps} className="flex items-center justify-center pr-3 text-gray-500 cursor-grab active:cursor-grabbing">
               <GripVertical size={20} />
             </div>
 
-            <div className="flex-1" onClick={() => !isTimerRunning && handleTaskClick(task.id)}>
+            <div className="flex-1 cursor-pointer" onClick={() => handleTaskClick(task.id)}>
               <span className="font-semibold block truncate text-white">{task.name}</span>
               <span className="text-gray-400 text-sm">{task.duration} min</span>
             </div>

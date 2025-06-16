@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, FC } from 'react';
 import { useTaskManager } from '../hooks/useTaskManager';
 import { Plus, X } from 'lucide-react';
 
-export const TaskForm: React.FC = () => {
+interface TaskFormProps {
+  taskManager: ReturnType<typeof useTaskManager>;
+}
+
+export const TaskForm: FC<TaskFormProps> = ({ taskManager }) => {
   const {
     newTaskName,
     setNewTaskName,
@@ -14,7 +18,7 @@ export const TaskForm: React.FC = () => {
     addOrUpdateTask,
     cancelEdit,
     handleKeyDown,
-  } = useTaskManager();
+  } = taskManager;
 
   const [durationError, setDurationError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
@@ -65,12 +69,6 @@ export const TaskForm: React.FC = () => {
     addOrUpdateTask();
   };
 
-  const submitButtonClasses = `px-4 py-3 rounded-md transition-all duration-200 ease-in-out flex items-center gap-2 font-semibold ${
-    editingTaskId
-      ? 'bg-indigo-600 hover:bg-indigo-500 text-white'
-      : 'bg-rose-500 hover:bg-rose-600 text-white'
-  }`;
-
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="relative">
       <div className="flex gap-3 items-start">
@@ -83,12 +81,12 @@ export const TaskForm: React.FC = () => {
             value={newTaskName}
             onChange={(e) => setNewTaskName(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, durationInputRef.current)}
-            placeholder="Name"
+            placeholder="New task name"
             className="w-full p-3 bg-gray-800 border border-gray-700 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white placeholder-gray-400 text-base"
           />
         </div>
         <div className="flex-shrink-0">
-          <label htmlFor="taskDuration" className="sr-only">Mins</label>
+          <label htmlFor="taskDuration" className="sr-only">Duration (minutes)</label>
           <input
             id="taskDuration"
             ref={durationInputRef}
@@ -102,22 +100,24 @@ export const TaskForm: React.FC = () => {
           />
           {durationError && <p className="text-red-500 text-xs mt-1 absolute">{durationError}</p>}
         </div>
-        <button
-          type="submit"
-          className="px-4 py-3 rounded-md transition-colors flex items-center gap-2 font-semibold bg-indigo-600 hover:bg-indigo-500 text-white"
-          aria-label={editingTaskId ? 'Update Task' : 'Add Task'}
-        >
-          {editingTaskId ? 'Update' : <><Plus size={18} /><span>Add</span></>}
-        </button>
         {editingTaskId && (
-          <button
-            type="button"
-            onClick={cancelEdit}
-            className="p-3 rounded-md text-gray-400 hover:text-white bg-gray-700 hover:bg-gray-600 transition-colors"
-            title="Cancel Edit"
-          >
-            <X size={20} />
-          </button>
+          <>
+            <button
+              type="submit"
+              className="px-4 py-3 rounded-md transition-colors flex items-center gap-2 font-semibold bg-indigo-600 hover:bg-indigo-500 text-white"
+              aria-label='Update Task'
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              onClick={cancelEdit}
+              className="p-3 rounded-md text-gray-400 hover:text-white bg-gray-700 hover:bg-gray-600 transition-colors"
+              title="Cancel Edit"
+            >
+              <X size={20} />
+            </button>
+          </>
         )}
       </div>
     </form>

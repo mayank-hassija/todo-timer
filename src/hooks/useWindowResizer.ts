@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import { useTaskStore, type TaskState } from '../store/useTaskStore';
-import { appWindow, LogicalSize } from '@tauri-apps/api/window';
+import { useTaskStore } from '../store/useTaskStore';
+import { appWindow } from '@tauri-apps/api/window';
 
 const TASK_ITEM_HEIGHT = 76; // Approximate height of a single task item in pixels
 const FORM_HEIGHT = 150; // Approximate height of the form and surrounding elements
 const MAX_TASKS_VISIBLE = 5;
 
-export function useWindowResize() {
-  const tasks = useTaskStore((state: TaskState) => state.tasks);
+export function useWindowResizer() {
+  const tasks = useTaskStore((state) => state.tasks);
 
   useEffect(() => {
     const numTasks = tasks.length;
@@ -17,7 +17,7 @@ export function useWindowResize() {
       targetHeight += Math.min(numTasks, MAX_TASKS_VISIBLE) * TASK_ITEM_HEIGHT;
     }
 
-    appWindow.setSize(new LogicalSize(420, targetHeight));
+    appWindow.setSize(new tauri.window.LogicalSize(420, targetHeight));
 
   }, [tasks.length]);
 } 

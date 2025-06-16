@@ -81,6 +81,7 @@ const timerStateCreator: StateCreator<TimerState, [['zustand/immer', never]]> = 
       if (state.remainingTime > 1) {
         state.remainingTime -= 1;
       } else {
+        playSound('/sound.mp3');
         get().skipTask();
       }
     });
