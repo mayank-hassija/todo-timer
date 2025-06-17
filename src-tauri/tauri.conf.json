@@ -1,49 +1,57 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "identifier": "com.todo-timer.dev",
-  "productName": "Todo Timer",
-  "version": "0.1.0",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "frontendDist": "../dist"
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist"
   },
-  "app": {
+  "package": {
+    "productName": "Todo Timer",
+    "version": "0.1.0"
+  },
+  "tauri": {
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
-        "resizable": true,
+        "resizable": false,
         "title": "Todo Timer",
-        "width": 420,
-        "minWidth": 420,
-        "minHeight": 300,
-        "maxWidth": 600,
-        "maxHeight": 800,
+        "width": 360,
+        "height": 100,
+        "minWidth": 360,
+        "minHeight": 100,
         "label": "main",
-        "alwaysOnTop": true,
-        "minimizable": true,
-        "maximizable": true
+        "alwaysOnTop": true
       }
     ],
-    "trayIcon": {
+    "systemTray": {
       "iconPath": "icons/icon.ico",
-      "iconAsTemplate": false,
-      "id": "main-tray"
+      "iconAsTemplate": false
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.todo-timer.dev",
+      "icon": [
+        "icons/icon.png",
+        "icons/icon.ico"
+      ]
     },
     "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'"
+      "csp": null
+    },
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "window": {
+        "all": true
+      },
+      "notification": {
+        "all": true
+      }
     }
-  },
-  "bundle": {
-    "active": true,
-    "targets": ["msi"],
-    "icon": [
-      "icons/icon.png",
-      "icons/icon.ico"
-    ]
-  },
-  "plugins": {
-    "shell": {}
   }
 }
