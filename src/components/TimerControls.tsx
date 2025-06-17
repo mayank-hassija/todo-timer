@@ -12,6 +12,7 @@ interface TimerControlsProps {
   repeatLoop: boolean;
   setRepeatLoop: (repeat: boolean) => void;
   totalDuration: number;
+  handleSeek: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export const TimerControls: React.FC<TimerControlsProps> = ({
@@ -25,6 +26,7 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
   repeatLoop,
   setRepeatLoop,
   totalDuration,
+  handleSeek,
 }) => {
   const elapsedTime = totalDuration - remainingTime;
   const progressPercentage = totalDuration > 0 ? (elapsedTime / totalDuration) * 100 : 0;
@@ -70,7 +72,10 @@ export const TimerControls: React.FC<TimerControlsProps> = ({
       </div>
 
       <div className="w-full">
-        <div className="w-full bg-gray-700 rounded-full h-1">
+        <div
+          className="w-full bg-gray-700 rounded-full h-1 cursor-pointer"
+          onClick={handleSeek}
+        >
           <div
             className="bg-green-500 h-1 rounded-full"
             style={{ width: `${progressPercentage}%` }}

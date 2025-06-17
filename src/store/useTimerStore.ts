@@ -96,6 +96,7 @@ export const useTimerStore = create<TimerState>()(
                 if (state.remainingTime > 1) {
                     return { remainingTime: state.remainingTime - 1 };
                 }
+                new Audio('/sound.mp3').play();
                 get().actions.skipTask();
                 return { remainingTime: 0 };
             });

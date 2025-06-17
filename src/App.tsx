@@ -9,8 +9,12 @@ import { TimerControls } from './components/TimerControls'
 
 function formatTime(seconds: number): string {
   const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
+  const remainingSeconds = Math.floor(seconds % 60)
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
+}
+
+const playCompletionSound = () => {
+  new Audio('/sound.mp3').play()
 }
 
 function App() {
@@ -68,7 +72,7 @@ function App() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [isTimerRunning, isPaused, tasks])
+  }, [isTimerRunning, isPaused, tasks, currentTaskIndex, repeatLoop])
 
   useEffect(() => {
     const updateHeight = async () => {
@@ -105,13 +109,19 @@ function App() {
   }
 
   const handleTaskCompletion = () => {
+    playCompletionSound();
     const nextIndex = currentTaskIndex + 1
     if (nextIndex < tasks.length) {
       setCurrentTaskIndex(nextIndex)
       setRemainingTime(tasks[nextIndex].duration * 60)
     } else if (repeatLoop) {
-      setCurrentTaskIndex(0)
-      setRemainingTime(tasks[0].duration * 60)
+      if (tasks.length > 0) {
+        setCurrentTaskIndex(0)
+        setRemainingTime(tasks[0].duration * 60)
+      } else {
+        setIsTimerRunning(false)
+        setView(false)
+      }
     } else {
       setIsTimerRunning(false)
       setView(false)
@@ -122,6 +132,16 @@ function App() {
     if (!isTimerRunning) return;
     handleTaskCompletion();
   };
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isTimerRunning) return;
+    const progressBar = e.currentTarget;
+    const clickPosition = e.clientX - progressBar.getBoundingClientRect().left;
+    const totalWidth = progressBar.offsetWidth;
+    const totalDuration = tasks[currentTaskIndex].duration * 60;
+    const newElapsedTime = (clickPosition / totalWidth) * totalDuration;
+    setRemainingTime(totalDuration - newElapsedTime);
+  }
   
   const addOrUpdateTask = () => {
     if (!newTaskName || !taskDuration || taskDuration <= 0) return;
@@ -253,6 +273,7 @@ function App() {
           repeatLoop={repeatLoop}
           setRepeatLoop={setRepeatLoop}
           totalDuration={currentTask?.duration * 60}
+          handleSeek={handleSeek}
         />
       </div>
     )
